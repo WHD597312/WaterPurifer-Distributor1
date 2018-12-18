@@ -18,31 +18,9 @@ public class TenTwoUtil {
 	
 	public static int changeToTen(int[] x){
 		int result =0;
-		if(x[0]==1){
-			result += 128;
-		}
-		if(x[1]==1){
-			result += 64;
-		}
-		if(x[2]==1){
-			result += 32;
-		}
-		if(x[3]==1){
-			result += 16;
-		}
-		if(x[4]==1){
-			result +=8;
-		}
-		if(x[5]==1){
-			result += 4;
-		}
-		if(x[6]==1){
-			result += 2;
-		}
-		if(x[7]==1){
-			result += 1;
+		for (int i =0; i <8; i++) {
+			result+=x[i]<<(7-i);
 		}
 		return result;
 	}
-	
 }

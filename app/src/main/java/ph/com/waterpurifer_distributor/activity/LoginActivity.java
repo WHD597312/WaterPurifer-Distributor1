@@ -34,9 +34,9 @@ import butterknife.OnClick;
 import ph.com.waterpurifer_distributor.R;
 import ph.com.waterpurifer_distributor.base.BaseActivity;
 import ph.com.waterpurifer_distributor.base.MyApplication;
-import ph.com.waterpurifer_distributor.util.HttpUtils;
 import ph.com.waterpurifer_distributor.util.NetWorkUtil;
 import ph.com.waterpurifer_distributor.util.ToastUtil;
+import ph.com.waterpurifer_distributor.util.http.HttpUtils;
 import ph.com.waterpurifer_distributor.util.view.ScreenSizeUtils;
 
 
@@ -205,7 +205,7 @@ public class LoginActivity extends BaseActivity {
         protected String doInBackground(Map<String, Object>... maps) {
             String code = "";
             Map<String, Object> prarms = maps[0];
-            String result = HttpUtils.postOkHpptRequest(HttpUtils.ipAddress + "/app/seller/login", prarms);
+            String result = HttpUtils.requestPost(HttpUtils.ipAddress + "app/seller/login", prarms);
             Log.e("back", "--->" + result);
             if (!ToastUtil.isEmpty(result)) {
                 try {

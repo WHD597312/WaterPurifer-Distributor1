@@ -71,31 +71,7 @@ public class MainFragment extends BaseFragment {
         preferences = getActivity().getSharedPreferences("my", MODE_PRIVATE);
         pass = preferences.getString("sellerManagePassword","");
         List<String> list1 = new ArrayList<>(Arrays.asList(title));
-        mainAdapter = new MainAdapter(getActivity(),deviceListData);
-        rv_main.setLayoutManager(new LinearLayoutManager(getActivity()));
-        rv_main.addItemDecoration(new SpaceItemDecoration(0,32));
-        rv_main.setAdapter(mainAdapter);
-        mainAdapter.SetOnItemClick(new MainAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                if (pass.length()>0){
-                    Intent intent = new Intent(getActivity(), PassWordActivity.class);
-                    intent.putExtra("deviceMac",deviceListData.get(position).getDeviceMac());
-                    intent.putExtra("type",1);
-                    startActivity(intent);
-                }else {
-                    Intent intent = new Intent(getActivity(), UserdetailsActivity.class);
-                    intent.putExtra("deviceMac",deviceListData.get(position).getDeviceMac());
-                    startActivity(intent);
-                }
 
-            }
-
-            @Override
-            public void onLongClick(View view, int posotion) {
-
-            }
-        });
         final MemuAdapter menuAdapter = new MemuAdapter(getActivity(),list1);
         LinearLayoutManager  layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
@@ -110,6 +86,7 @@ public class MainFragment extends BaseFragment {
                 //刷新适配器
                 menuAdapter.notifyDataSetChanged();
 
+                Log.e("qqqqqSSS5555",allListData.size()+"??");
                 switch(position){
                     case 0:
                         deviceListData.clear();
@@ -202,8 +179,6 @@ public class MainFragment extends BaseFragment {
                 }
             });
 
-        progressDialog = new ProgressDialog(getContext());
-
 
     }
 
@@ -211,16 +186,16 @@ public class MainFragment extends BaseFragment {
     @Override
     public void doBusiness(Context mContext) {
 
-        boolean isConn=true;
-        if (isConn){
-            showProgressDialog("正在加载，请稍后...");
-            Map<String, Object> params = new HashMap<>();
-            params.put("deviceUserId",((MainActivity)getActivity()).getUserId());
-            params.put("roleFlag", 2);
-            new getDeviceListAsynTask().execute(params);
-        }else {
-            ToastUtil.showShort(getActivity(), "无网络可用，请检查网络");
-        }
+//        boolean isConn=true;
+//        if (isConn){
+//            showProgressDialog("正在加载，请稍后...");
+//            Map<String, Object> params = new HashMap<>();
+//            params.put("deviceUserId",((MainActivity)getActivity()).getUserId());
+//            params.put("roleFlag", 2);
+//            new getDeviceListAsynTask().execute(params);
+//        }else {
+//            ToastUtil.showShort(getActivity(), "无网络可用，请检查网络");
+//        }
 
     }
 
@@ -243,84 +218,6 @@ public class MainFragment extends BaseFragment {
 
 
 
-
-
-
-    private ProgressDialog progressDialog;
-    //显示dialog
-    public void showProgressDialog(String message) {
-
-        progressDialog.setMessage(message);
-        progressDialog.setCancelable(false);
-        progressDialog.show();
-
-    }
-
-
-
-    String returnMsg;
-    class getDeviceListAsynTask extends AsyncTask<Map<String,Object>,Void,String> {
-
-        @Override
-        protected String doInBackground(Map<String, Object>... maps) {
-            String code = "";
-            Map<String, Object> prarms = maps[0];
-            String result = HttpUtils.postOkHpptRequest(HttpUtils.ipAddress + "/app/device/getDeviceList", prarms);
-            Log.e("back", "--->" + result);
-            if (!ToastUtil.isEmpty(result)) {
-                try {
-                    JSONObject jsonObject = new JSONObject(result);
-                    code = jsonObject.getString("returnCode");
-                    returnMsg=jsonObject.getString("returnMsg");
-//                    JSONObject returnData = jsonObject.getJSONObject("returnData");
-                    if ("100".equals(code)) {
-                        JsonObject content = new JsonParser().parse(result.toString()).getAsJsonObject();
-                        JsonArray list = content.getAsJsonArray("returnData");
-                        Gson gson = new Gson();
-                        deviceListData.clear();
-                        allListData.clear();
-                        for (int i = 0; i < list.size(); i++) {
-                            //通过反射 得到UserBean.class
-                            DeviceListData userList = gson.fromJson(list.get(i), DeviceListData.class);
-                            deviceListData.add(userList);
-                            allListData.add(userList);
-                        }
-//                        Equipment equipment = new Equipment();
-//                        equipment.setName(deviceMac);
-//                        equipment.setType(8);
-//                        equipment.setDeviceMac(deviceMac);
-//                        equipment.setId(Long.valueOf(deviceMac));
-//                        equmentDao.insert(equipment);
-//                        equipment2 = equipment;
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-            return code;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-
-            switch (s) {
-
-                case "100":
-                    if (progressDialog != null && progressDialog.isShowing())
-                        progressDialog.dismiss();
-                    mainAdapter.notifyDataSetChanged();
-                    break;
-                default:
-                    if (progressDialog != null && progressDialog.isShowing())
-                        progressDialog.dismiss();
-                    ToastUtil.showShort(getActivity(), returnMsg);
-                    break;
-
-            }
-        }
-    }
-
     Comparator<DeviceListData> comparator = new Comparator<DeviceListData>() {
         public int compare(DeviceListData s1, DeviceListData s2) {
             // 先排年龄
@@ -332,4 +229,86 @@ public class MainFragment extends BaseFragment {
             }
         }
     };
+
+
+
+
+
+    boolean isShow=true;
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if ((isVisibleToUser && isResumed())) {
+            onResume();
+        } else if (!isVisibleToUser) {
+            onPause();
+        }
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (getUserVisibleHint()) {
+           isShow=true;
+           if (mainAdapter!=null)
+            initData();
+            Log.e("qqqqqSSS",isShow+"??");
+            //TODO give the signal that the fragment is visible
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        isShow=false;
+        Log.e("qqqqqSSS22222",isShow+"??");
+
+        //TODO give the signal that the fragment is invisible
+    }
+
+    public boolean isShow() {
+        Log.e("qqqqqSSS33333",isShow+"??");
+
+        return isShow;
+    }
+
+
+    public void initData(){
+        Log.e("qqqqqSSS44444",isShow+"??");
+
+        List<DeviceListData> list=((MainActivity)getActivity()).getAllListData();
+        allListData.clear();
+        deviceListData.clear();
+        for (DeviceListData listData : list) {
+            allListData.add(listData);
+            deviceListData.add(listData);
+        }
+        Log.e("qqqqqSSS",allListData.get(0).getDeviceUserPhone()+"??"+deviceListData.size());
+
+        mainAdapter = new MainAdapter(getActivity(),deviceListData);
+        rv_main.setLayoutManager(new LinearLayoutManager(getActivity()));
+        rv_main.addItemDecoration(new SpaceItemDecoration(0,0));
+        rv_main.setAdapter(mainAdapter);
+        mainAdapter.SetOnItemClick(new MainAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                if (pass.length()>0){
+                    Intent intent = new Intent(getActivity(), PassWordActivity.class);
+                    intent.putExtra("deviceMac",deviceListData.get(position).getDeviceMac());
+                    intent.putExtra("type",1);
+                    startActivity(intent);
+                }else {
+                    Intent intent = new Intent(getActivity(), UserdetailsActivity.class);
+                    intent.putExtra("deviceMac",deviceListData.get(position).getDeviceMac());
+                    startActivity(intent);
+                }
+
+            }
+
+            @Override
+            public void onLongClick(View view, int posotion) {
+
+            }
+        });
+
+    }
 }

@@ -13,7 +13,7 @@ repositories {
 }
 
 greendao {
-    schemaVersion 34
+    schemaVersion 35
     daoPackage 'ph.com.waterpurifer_distributor.database.dao'
     targetGenDir 'src/main/java'
 }
