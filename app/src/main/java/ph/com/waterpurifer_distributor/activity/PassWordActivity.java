@@ -86,7 +86,7 @@ public class PassWordActivity extends BaseActivity {
                   switch (type){
                       case 1:
                           //查看用户信息
-                          
+
                           application.removeActivity(this);
                           Intent intent = new Intent(this, UserdetailsActivity.class);
                           intent.putExtra("deviceMac",deviceMac);

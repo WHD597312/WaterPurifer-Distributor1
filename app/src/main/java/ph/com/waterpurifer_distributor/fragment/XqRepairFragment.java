@@ -1,5 +1,6 @@
 package ph.com.waterpurifer_distributor.fragment;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Handler;
@@ -9,6 +10,8 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,7 +40,8 @@ public class XqRepairFragment extends BaseFragment {
     @BindView(R.id.rv_xqrepair)
     RecyclerView rv_xqrepair;
     List <RepireList> repireLists ;
-    ph.com.waterpurifer_distributor.adapter.xqRepairAdapter xqRepairAdapter;
+    xqRepairAdapter xqRepairAdapter;
+    RefreshLayout refreshLayou;
     int pos  ;
     int flag;
     @Override
@@ -48,12 +52,14 @@ public class XqRepairFragment extends BaseFragment {
     @Override
     public void initView(View view) {
         repireLists = new ArrayList<>();
+        progressDialog = new ProgressDialog(getActivity());
+        showProgressDialog("正在加载数据。。。");
         new GetRepairListAsyncTask().execute();
         xqRepairAdapter = new xqRepairAdapter(getActivity(),repireLists);
         rv_xqrepair.setLayoutManager(new LinearLayoutManager(getActivity()));
         rv_xqrepair.addItemDecoration(new SpaceItemDecoration(0,35));
         rv_xqrepair.setAdapter(xqRepairAdapter);
-        xqRepairAdapter.SetOnItemClick(new ph.com.waterpurifer_distributor.adapter.xqRepairAdapter.OnItemClickListener() {
+        xqRepairAdapter.SetOnItemClick(new  xqRepairAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
               flag = repireLists.get(position).getRepairFlag();
@@ -64,48 +70,14 @@ public class XqRepairFragment extends BaseFragment {
                     Map <String,Object> param = new HashMap<>();
                     param.put("repairId",repairId);
                     param.put("repairFlag",1);
-                    setRepairTypeAsyncTask = new SetRepairTypeAsyncTask();
-                    setRepairTypeAsyncTask.execute(param);
-                    new Thread(){
-
-                        public void run() {
-                            try {
-                                setRepairTypeAsyncTask.get(5, TimeUnit.SECONDS);
-                            } catch (InterruptedException | ExecutionException e) {
-                                e.printStackTrace();
-                            } catch (TimeoutException e) {
-                                e.printStackTrace();
-                                Message message = new Message();
-                                message.obj="TimeOut";
-                                handler.sendMessage(message);
-                            }
-                        }
-                    }.start();
-
+                    GetData(param);
                 }else if (flag==1){
                     flag=2;
                     int repairId =  repireLists.get(position).getRepairId();
                     Map <String,Object> param = new HashMap<>();
                     param.put("repairId",repairId);
                     param.put("repairFlag",2);
-                    setRepairTypeAsyncTask = new SetRepairTypeAsyncTask();
-                    setRepairTypeAsyncTask.execute(param);
-                    new Thread(){
-
-                        public void run() {
-                            try {
-                                setRepairTypeAsyncTask.get(5, TimeUnit.SECONDS);
-                            } catch (InterruptedException | ExecutionException e) {
-                                e.printStackTrace();
-                            } catch (TimeoutException e) {
-                                e.printStackTrace();
-                                Message message = new Message();
-                                message.obj="TimeOut";
-                                handler.sendMessage(message);
-                            }
-                        }
-                    }.start();
-
+                    GetData(param);
                 }
 
 
@@ -118,6 +90,27 @@ public class XqRepairFragment extends BaseFragment {
         });
     }
 
+    public void GetData( Map <String,Object> param){
+        setRepairTypeAsyncTask = new SetRepairTypeAsyncTask();
+        setRepairTypeAsyncTask.execute(param);
+        new Thread(){
+
+            public void run() {
+                try {
+                    setRepairTypeAsyncTask.get(5, TimeUnit.SECONDS);
+                } catch (InterruptedException | ExecutionException e) {
+                    e.printStackTrace();
+                } catch (TimeoutException e) {
+                    e.printStackTrace();
+                    Message message = new Message();
+                    message.obj="TimeOut";
+                    handler.sendMessage(message);
+                }
+            }
+        }.start();
+
+    }
+
     @Override
     public void doBusiness(Context mContext) {
 
@@ -127,6 +120,17 @@ public class XqRepairFragment extends BaseFragment {
     public void widgetClick(View v) {
 
     }
+    private ProgressDialog progressDialog;
+    //显示dialog
+    public void showProgressDialog(String message) {
+
+        progressDialog.setMessage(message);
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
+    }
+
+
 
     @OnClick({})
     public void onClick(View view){
@@ -203,6 +207,7 @@ public class XqRepairFragment extends BaseFragment {
                 case "100":
                     xqRepairAdapter.Refrash(repireLists);
                     xqRepairAdapter.notifyDataSetChanged();
+                    if (progressDialog!=null&&progressDialog.isShowing())
                     break;
             }
         }
