@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:background="@drawable/bg_main_item"
-    android:layout_height="@dimen/dp_75">
+    android:layout_height="@dimen/dp_75"
+    android:layout_marginBottom="@dimen/dp_16">
 
     <ImageView
         android:id="@+id/iv_item_pic"

@@ -35,6 +35,7 @@ import ph.com.waterpurifer_distributor.R;
 import ph.com.waterpurifer_distributor.base.BaseActivity;
 import ph.com.waterpurifer_distributor.base.MyApplication;
 import ph.com.waterpurifer_distributor.util.HttpUtils;
+import ph.com.waterpurifer_distributor.util.Mobile;
 import ph.com.waterpurifer_distributor.util.NetWorkUtil;
 import ph.com.waterpurifer_distributor.util.ToastUtil;
 import ph.com.waterpurifer_distributor.util.view.ScreenSizeUtils;
@@ -94,19 +95,18 @@ public class LoginActivity extends BaseActivity {
             case R.id.btn_login:
                 String phone = et_name.getText().toString();
                 String password = et_pswd.getText().toString();
-//                if (TextUtils.isEmpty(phone)) {
-//                    toast("账号码不能为空");
-//                    break;
-//                } else if (!.isMobile(phone)) {
-//                    toast( "手机号码不合法");
-//                    break;
-//                }
-//                if (TextUtils.isEmpty(password)) {
-//                    Utils.showToast(this, "请输入密码");
-//                    break;
-//                }
-//                            boolean isConn = NetWorkUtil.isConn(MyApplication.getContext());
-                boolean isConn=true;
+                if (TextUtils.isEmpty(phone)) {
+                    toast("账号码不能为空");
+                    break;
+                }/* else if (!Mobile.isMobile(phone)) {
+                    toast( "手机号码不合法");
+                    break;
+                }*/
+                if (TextUtils.isEmpty(password)) {
+                    ToastUtil.showShort(this, "请输入密码");
+                    break;
+                }
+                boolean isConn = NetWorkUtil.isConn(MyApplication.getContext());
                 if (isConn){
                     showProgressDialog("正在登录，请稍后...");
                     Map<String, Object> params = new HashMap<>();

@@ -37,6 +37,7 @@ public class MyApplication extends Application {
         sRequestQueue = Volley.newRequestQueue(getApplicationContext());
         fragments=new ArrayList<>();
         app = this;
+        mContext=this;
         activities=new ArrayList<>();
         fragments=new ArrayList<>();
 

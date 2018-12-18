@@ -29,7 +29,9 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MyViewHolder> 
         this.context = context;
         this.mData = list;
     }
-
+    public void gertData (List<DeviceListData> list){
+         this.mData = list;
+    }
 
     @NonNull
     @Override
