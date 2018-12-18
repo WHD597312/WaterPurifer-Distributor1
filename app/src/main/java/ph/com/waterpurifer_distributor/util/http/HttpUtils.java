@@ -38,7 +38,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class HttpUtils {
 
-    public static String ipAddress = "http://47.98.131.11:8082/warmer/v1.0";
+    public static String ipAddress = "http://47.98.131.11:8094/";
 
     public static String getInputStream(InputStream is) {
         String result = null;

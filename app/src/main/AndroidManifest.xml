@@ -63,6 +63,20 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <service
+            android:name=".util.mqtt.MQService"
+            android:enabled="true"
+            android:exported="true" />
+
+        <receiver
+            android:name=".util.mqtt.MQTTMessageReveiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="mqttmessage" />
+            </intent-filter>
+        </receiver>
         <activity android:name=".activity.MainActivity" />
         <activity android:name=".activity.UserdetailsActivity" />
         <activity android:name=".activity.EqupmentxqActivity" />

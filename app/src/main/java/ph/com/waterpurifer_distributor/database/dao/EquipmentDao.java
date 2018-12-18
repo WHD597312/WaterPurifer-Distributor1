@@ -27,46 +27,50 @@ public class EquipmentDao extends AbstractDao<Equipment, Long> {
         public final static Property Id = new Property(0, long.class, "id", true, "_id");
         public final static Property Type = new Property(1, int.class, "type", false, "TYPE");
         public final static Property Name = new Property(2, String.class, "name", false, "NAME");
-        public final static Property DeviceMac = new Property(3, String.class, "deviceMac", false, "DEVICE_MAC");
-        public final static Property DeviceMCU = new Property(4, String.class, "deviceMCU", false, "DEVICE_MCU");
-        public final static Property DeviceUserId = new Property(5, int.class, "deviceUserId", false, "DEVICE_USER_ID");
-        public final static Property WPurifierState = new Property(6, int.class, "wPurifierState", false, "W_PURIFIER_STATE");
-        public final static Property Bussinessmodule = new Property(7, int.class, "bussinessmodule", false, "BUSSINESSMODULE");
-        public final static Property WPurifierfilter = new Property(8, int.class, "wPurifierfilter", false, "W_PURIFIERFILTER");
-        public final static Property WPurifierfilter1 = new Property(9, int.class, "wPurifierfilter1", false, "W_PURIFIERFILTER1");
-        public final static Property WPurifierfilter2 = new Property(10, int.class, "wPurifierfilter2", false, "W_PURIFIERFILTER2");
-        public final static Property WPurifierfilter3 = new Property(11, int.class, "wPurifierfilter3", false, "W_PURIFIERFILTER3");
-        public final static Property WPurifierfilter4 = new Property(12, int.class, "wPurifierfilter4", false, "W_PURIFIERFILTER4");
-        public final static Property WPurifierfilter5 = new Property(13, int.class, "wPurifierfilter5", false, "W_PURIFIERFILTER5");
-        public final static Property WTrueFlowmeter = new Property(14, String.class, "wTrueFlowmeter", false, "W_TRUE_FLOWMETER");
-        public final static Property WPurifierPrimaryQuqlity = new Property(15, String.class, "wPurifierPrimaryQuqlity", false, "W_PURIFIER_PRIMARY_QUQLITY");
-        public final static Property FlowmeterWarm = new Property(16, int.class, "FlowmeterWarm", false, "FLOWMETER_WARM");
-        public final static Property WPurifierOutQuqlity = new Property(17, int.class, "wPurifierOutQuqlity", false, "W_PURIFIER_OUT_QUQLITY");
-        public final static Property WTotalProductionTime = new Property(18, String.class, "wTotalProductionTime", false, "W_TOTAL_PRODUCTION_TIME");
-        public final static Property WContinuiProductionTime = new Property(19, int.class, "wContinuiProductionTime", false, "W_CONTINUI_PRODUCTION_TIME");
-        public final static Property WWaterStall = new Property(20, int.class, "wWaterStall", false, "W_WATER_STALL");
-        public final static Property WMobileSignal = new Property(21, int.class, "wMobileSignal", false, "W_MOBILE_SIGNAL");
-        public final static Property IsOpen = new Property(22, int.class, "IsOpen", false, "IS_OPEN");
-        public final static Property HavaWater = new Property(23, int.class, "HavaWater", false, "HAVA_WATER");
-        public final static Property WaterWash = new Property(24, int.class, "WaterWash", false, "WATER_WASH");
-        public final static Property MakeWater = new Property(25, int.class, "MakeWater", false, "MAKE_WATER");
-        public final static Property IsFull = new Property(26, int.class, "IsFull", false, "IS_FULL");
-        public final static Property Repair = new Property(27, int.class, "Repair", false, "REPAIR");
-        public final static Property IsLeakage = new Property(28, int.class, "IsLeakage", false, "IS_LEAKAGE");
-        public final static Property Alarming = new Property(29, int.class, "Alarming", false, "ALARMING");
-        public final static Property Warming = new Property(30, int.class, "Warming", false, "WARMING");
-        public final static Property AlarmState = new Property(31, int.class, "AlarmState", false, "ALARM_STATE");
-        public final static Property AlarmIsLeakage = new Property(32, int.class, "AlarmIsLeakage", false, "ALARM_IS_LEAKAGE");
-        public final static Property ContinuProduction = new Property(33, int.class, "ContinuProduction", false, "CONTINU_PRODUCTION");
-        public final static Property AlarmFlowmeter = new Property(34, int.class, "AlarmFlowmeter", false, "ALARM_FLOWMETER");
-        public final static Property AlarmWash = new Property(35, int.class, "AlarmWash", false, "ALARM_WASH");
-        public final static Property RechargeTime = new Property(36, String.class, "RechargeTime", false, "RECHARGE_TIME");
-        public final static Property RechargeFlow = new Property(37, String.class, "RechargeFlow", false, "RECHARGE_FLOW");
-        public final static Property BackwaterInterval = new Property(38, String.class, "BackwaterInterval", false, "BACKWATER_INTERVAL");
-        public final static Property BackwashTime = new Property(39, int.class, "BackwashTime", false, "BACKWASH_TIME");
-        public final static Property BackwashInterval = new Property(40, String.class, "BackwashInterval", false, "BACKWASH_INTERVAL");
-        public final static Property MachineType = new Property(41, int.class, "MachineType", false, "MACHINE_TYPE");
-        public final static Property WashTime = new Property(42, int.class, "WashTime", false, "WASH_TIME");
+        public final static Property Online = new Property(3, boolean.class, "online", false, "ONLINE");
+        public final static Property DeviceMac = new Property(4, String.class, "deviceMac", false, "DEVICE_MAC");
+        public final static Property DeviceMCU = new Property(5, String.class, "deviceMCU", false, "DEVICE_MCU");
+        public final static Property DeviceUserId = new Property(6, int.class, "deviceUserId", false, "DEVICE_USER_ID");
+        public final static Property WPurifierState = new Property(7, int.class, "wPurifierState", false, "W_PURIFIER_STATE");
+        public final static Property Bussinessmodule = new Property(8, int.class, "bussinessmodule", false, "BUSSINESSMODULE");
+        public final static Property WPurifierfilter = new Property(9, int.class, "wPurifierfilter", false, "W_PURIFIERFILTER");
+        public final static Property WPurifierfilter1 = new Property(10, int.class, "wPurifierfilter1", false, "W_PURIFIERFILTER1");
+        public final static Property WPurifierfilter2 = new Property(11, int.class, "wPurifierfilter2", false, "W_PURIFIERFILTER2");
+        public final static Property WPurifierfilter3 = new Property(12, int.class, "wPurifierfilter3", false, "W_PURIFIERFILTER3");
+        public final static Property WPurifierfilter4 = new Property(13, int.class, "wPurifierfilter4", false, "W_PURIFIERFILTER4");
+        public final static Property WPurifierfilter5 = new Property(14, int.class, "wPurifierfilter5", false, "W_PURIFIERFILTER5");
+        public final static Property WTrueFlowmeter = new Property(15, int.class, "wTrueFlowmeter", false, "W_TRUE_FLOWMETER");
+        public final static Property WPurifierPrimaryQuqlity = new Property(16, int.class, "wPurifierPrimaryQuqlity", false, "W_PURIFIER_PRIMARY_QUQLITY");
+        public final static Property FlowmeterWarm = new Property(17, int.class, "FlowmeterWarm", false, "FLOWMETER_WARM");
+        public final static Property WPurifierOutQuqlity = new Property(18, int.class, "wPurifierOutQuqlity", false, "W_PURIFIER_OUT_QUQLITY");
+        public final static Property WTotalProductionTime = new Property(19, int.class, "wTotalProductionTime", false, "W_TOTAL_PRODUCTION_TIME");
+        public final static Property WContinuiProductionTime = new Property(20, int.class, "wContinuiProductionTime", false, "W_CONTINUI_PRODUCTION_TIME");
+        public final static Property WWaterStall = new Property(21, int.class, "wWaterStall", false, "W_WATER_STALL");
+        public final static Property WMobileSignal = new Property(22, int.class, "wMobileSignal", false, "W_MOBILE_SIGNAL");
+        public final static Property IsOpen = new Property(23, int.class, "IsOpen", false, "IS_OPEN");
+        public final static Property HavaWater = new Property(24, int.class, "HavaWater", false, "HAVA_WATER");
+        public final static Property WaterWash = new Property(25, int.class, "WaterWash", false, "WATER_WASH");
+        public final static Property MakeWater = new Property(26, int.class, "MakeWater", false, "MAKE_WATER");
+        public final static Property IsFull = new Property(27, int.class, "IsFull", false, "IS_FULL");
+        public final static Property IsReset = new Property(28, int.class, "isReset", false, "IS_RESET");
+        public final static Property IsReset2 = new Property(29, int.class, "isReset2", false, "IS_RESET2");
+        public final static Property Repair = new Property(30, int.class, "Repair", false, "REPAIR");
+        public final static Property IsLeakage = new Property(31, int.class, "IsLeakage", false, "IS_LEAKAGE");
+        public final static Property Alarming = new Property(32, int.class, "Alarming", false, "ALARMING");
+        public final static Property Warming = new Property(33, int.class, "Warming", false, "WARMING");
+        public final static Property AlarmState = new Property(34, int.class, "AlarmState", false, "ALARM_STATE");
+        public final static Property AlarmIsLeakage = new Property(35, int.class, "AlarmIsLeakage", false, "ALARM_IS_LEAKAGE");
+        public final static Property ContinuProduction = new Property(36, int.class, "ContinuProduction", false, "CONTINU_PRODUCTION");
+        public final static Property AlarmFlowmeter = new Property(37, int.class, "AlarmFlowmeter", false, "ALARM_FLOWMETER");
+        public final static Property AlarmWash = new Property(38, int.class, "AlarmWash", false, "ALARM_WASH");
+        public final static Property RechargeTime = new Property(39, int.class, "RechargeTime", false, "RECHARGE_TIME");
+        public final static Property RechargeFlow = new Property(40, int.class, "RechargeFlow", false, "RECHARGE_FLOW");
+        public final static Property BackwaterInterval = new Property(41, int.class, "BackwaterInterval", false, "BACKWATER_INTERVAL");
+        public final static Property BackwashTime = new Property(42, int.class, "BackwashTime", false, "BACKWASH_TIME");
+        public final static Property BackwashInterval = new Property(43, int.class, "BackwashInterval", false, "BACKWASH_INTERVAL");
+        public final static Property MachineType = new Property(44, int.class, "MachineType", false, "MACHINE_TYPE");
+        public final static Property WashTime = new Property(45, int.class, "WashTime", false, "WASH_TIME");
+        public final static Property Gear = new Property(46, int.class, "gear", false, "GEAR");
     }
 
 
@@ -85,46 +89,50 @@ public class EquipmentDao extends AbstractDao<Equipment, Long> {
                 "\"_id\" INTEGER PRIMARY KEY NOT NULL ," + // 0: id
                 "\"TYPE\" INTEGER NOT NULL ," + // 1: type
                 "\"NAME\" TEXT," + // 2: name
-                "\"DEVICE_MAC\" TEXT," + // 3: deviceMac
-                "\"DEVICE_MCU\" TEXT," + // 4: deviceMCU
-                "\"DEVICE_USER_ID\" INTEGER NOT NULL ," + // 5: deviceUserId
-                "\"W_PURIFIER_STATE\" INTEGER NOT NULL ," + // 6: wPurifierState
-                "\"BUSSINESSMODULE\" INTEGER NOT NULL ," + // 7: bussinessmodule
-                "\"W_PURIFIERFILTER\" INTEGER NOT NULL ," + // 8: wPurifierfilter
-                "\"W_PURIFIERFILTER1\" INTEGER NOT NULL ," + // 9: wPurifierfilter1
-                "\"W_PURIFIERFILTER2\" INTEGER NOT NULL ," + // 10: wPurifierfilter2
-                "\"W_PURIFIERFILTER3\" INTEGER NOT NULL ," + // 11: wPurifierfilter3
-                "\"W_PURIFIERFILTER4\" INTEGER NOT NULL ," + // 12: wPurifierfilter4
-                "\"W_PURIFIERFILTER5\" INTEGER NOT NULL ," + // 13: wPurifierfilter5
-                "\"W_TRUE_FLOWMETER\" TEXT," + // 14: wTrueFlowmeter
-                "\"W_PURIFIER_PRIMARY_QUQLITY\" TEXT," + // 15: wPurifierPrimaryQuqlity
-                "\"FLOWMETER_WARM\" INTEGER NOT NULL ," + // 16: FlowmeterWarm
-                "\"W_PURIFIER_OUT_QUQLITY\" INTEGER NOT NULL ," + // 17: wPurifierOutQuqlity
-                "\"W_TOTAL_PRODUCTION_TIME\" TEXT," + // 18: wTotalProductionTime
-                "\"W_CONTINUI_PRODUCTION_TIME\" INTEGER NOT NULL ," + // 19: wContinuiProductionTime
-                "\"W_WATER_STALL\" INTEGER NOT NULL ," + // 20: wWaterStall
-                "\"W_MOBILE_SIGNAL\" INTEGER NOT NULL ," + // 21: wMobileSignal
-                "\"IS_OPEN\" INTEGER NOT NULL ," + // 22: IsOpen
-                "\"HAVA_WATER\" INTEGER NOT NULL ," + // 23: HavaWater
-                "\"WATER_WASH\" INTEGER NOT NULL ," + // 24: WaterWash
-                "\"MAKE_WATER\" INTEGER NOT NULL ," + // 25: MakeWater
-                "\"IS_FULL\" INTEGER NOT NULL ," + // 26: IsFull
-                "\"REPAIR\" INTEGER NOT NULL ," + // 27: Repair
-                "\"IS_LEAKAGE\" INTEGER NOT NULL ," + // 28: IsLeakage
-                "\"ALARMING\" INTEGER NOT NULL ," + // 29: Alarming
-                "\"WARMING\" INTEGER NOT NULL ," + // 30: Warming
-                "\"ALARM_STATE\" INTEGER NOT NULL ," + // 31: AlarmState
-                "\"ALARM_IS_LEAKAGE\" INTEGER NOT NULL ," + // 32: AlarmIsLeakage
-                "\"CONTINU_PRODUCTION\" INTEGER NOT NULL ," + // 33: ContinuProduction
-                "\"ALARM_FLOWMETER\" INTEGER NOT NULL ," + // 34: AlarmFlowmeter
-                "\"ALARM_WASH\" INTEGER NOT NULL ," + // 35: AlarmWash
-                "\"RECHARGE_TIME\" TEXT," + // 36: RechargeTime
-                "\"RECHARGE_FLOW\" TEXT," + // 37: RechargeFlow
-                "\"BACKWATER_INTERVAL\" TEXT," + // 38: BackwaterInterval
-                "\"BACKWASH_TIME\" INTEGER NOT NULL ," + // 39: BackwashTime
-                "\"BACKWASH_INTERVAL\" TEXT," + // 40: BackwashInterval
-                "\"MACHINE_TYPE\" INTEGER NOT NULL ," + // 41: MachineType
-                "\"WASH_TIME\" INTEGER NOT NULL );"); // 42: WashTime
+                "\"ONLINE\" INTEGER NOT NULL ," + // 3: online
+                "\"DEVICE_MAC\" TEXT," + // 4: deviceMac
+                "\"DEVICE_MCU\" TEXT," + // 5: deviceMCU
+                "\"DEVICE_USER_ID\" INTEGER NOT NULL ," + // 6: deviceUserId
+                "\"W_PURIFIER_STATE\" INTEGER NOT NULL ," + // 7: wPurifierState
+                "\"BUSSINESSMODULE\" INTEGER NOT NULL ," + // 8: bussinessmodule
+                "\"W_PURIFIERFILTER\" INTEGER NOT NULL ," + // 9: wPurifierfilter
+                "\"W_PURIFIERFILTER1\" INTEGER NOT NULL ," + // 10: wPurifierfilter1
+                "\"W_PURIFIERFILTER2\" INTEGER NOT NULL ," + // 11: wPurifierfilter2
+                "\"W_PURIFIERFILTER3\" INTEGER NOT NULL ," + // 12: wPurifierfilter3
+                "\"W_PURIFIERFILTER4\" INTEGER NOT NULL ," + // 13: wPurifierfilter4
+                "\"W_PURIFIERFILTER5\" INTEGER NOT NULL ," + // 14: wPurifierfilter5
+                "\"W_TRUE_FLOWMETER\" INTEGER NOT NULL ," + // 15: wTrueFlowmeter
+                "\"W_PURIFIER_PRIMARY_QUQLITY\" INTEGER NOT NULL ," + // 16: wPurifierPrimaryQuqlity
+                "\"FLOWMETER_WARM\" INTEGER NOT NULL ," + // 17: FlowmeterWarm
+                "\"W_PURIFIER_OUT_QUQLITY\" INTEGER NOT NULL ," + // 18: wPurifierOutQuqlity
+                "\"W_TOTAL_PRODUCTION_TIME\" INTEGER NOT NULL ," + // 19: wTotalProductionTime
+                "\"W_CONTINUI_PRODUCTION_TIME\" INTEGER NOT NULL ," + // 20: wContinuiProductionTime
+                "\"W_WATER_STALL\" INTEGER NOT NULL ," + // 21: wWaterStall
+                "\"W_MOBILE_SIGNAL\" INTEGER NOT NULL ," + // 22: wMobileSignal
+                "\"IS_OPEN\" INTEGER NOT NULL ," + // 23: IsOpen
+                "\"HAVA_WATER\" INTEGER NOT NULL ," + // 24: HavaWater
+                "\"WATER_WASH\" INTEGER NOT NULL ," + // 25: WaterWash
+                "\"MAKE_WATER\" INTEGER NOT NULL ," + // 26: MakeWater
+                "\"IS_FULL\" INTEGER NOT NULL ," + // 27: IsFull
+                "\"IS_RESET\" INTEGER NOT NULL ," + // 28: isReset
+                "\"IS_RESET2\" INTEGER NOT NULL ," + // 29: isReset2
+                "\"REPAIR\" INTEGER NOT NULL ," + // 30: Repair
+                "\"IS_LEAKAGE\" INTEGER NOT NULL ," + // 31: IsLeakage
+                "\"ALARMING\" INTEGER NOT NULL ," + // 32: Alarming
+                "\"WARMING\" INTEGER NOT NULL ," + // 33: Warming
+                "\"ALARM_STATE\" INTEGER NOT NULL ," + // 34: AlarmState
+                "\"ALARM_IS_LEAKAGE\" INTEGER NOT NULL ," + // 35: AlarmIsLeakage
+                "\"CONTINU_PRODUCTION\" INTEGER NOT NULL ," + // 36: ContinuProduction
+                "\"ALARM_FLOWMETER\" INTEGER NOT NULL ," + // 37: AlarmFlowmeter
+                "\"ALARM_WASH\" INTEGER NOT NULL ," + // 38: AlarmWash
+                "\"RECHARGE_TIME\" INTEGER NOT NULL ," + // 39: RechargeTime
+                "\"RECHARGE_FLOW\" INTEGER NOT NULL ," + // 40: RechargeFlow
+                "\"BACKWATER_INTERVAL\" INTEGER NOT NULL ," + // 41: BackwaterInterval
+                "\"BACKWASH_TIME\" INTEGER NOT NULL ," + // 42: BackwashTime
+                "\"BACKWASH_INTERVAL\" INTEGER NOT NULL ," + // 43: BackwashInterval
+                "\"MACHINE_TYPE\" INTEGER NOT NULL ," + // 44: MachineType
+                "\"WASH_TIME\" INTEGER NOT NULL ," + // 45: WashTime
+                "\"GEAR\" INTEGER NOT NULL );"); // 46: gear
     }
 
     /** Drops the underlying database table. */
@@ -143,82 +151,58 @@ public class EquipmentDao extends AbstractDao<Equipment, Long> {
         if (name != null) {
             stmt.bindString(3, name);
         }
+        stmt.bindLong(4, entity.getOnline() ? 1L: 0L);
  
         String deviceMac = entity.getDeviceMac();
         if (deviceMac != null) {
-            stmt.bindString(4, deviceMac);
+            stmt.bindString(5, deviceMac);
         }
  
         String deviceMCU = entity.getDeviceMCU();
         if (deviceMCU != null) {
-            stmt.bindString(5, deviceMCU);
+            stmt.bindString(6, deviceMCU);
         }
-        stmt.bindLong(6, entity.getDeviceUserId());
-        stmt.bindLong(7, entity.getWPurifierState());
-        stmt.bindLong(8, entity.getBussinessmodule());
-        stmt.bindLong(9, entity.getWPurifierfilter());
-        stmt.bindLong(10, entity.getWPurifierfilter1());
-        stmt.bindLong(11, entity.getWPurifierfilter2());
-        stmt.bindLong(12, entity.getWPurifierfilter3());
-        stmt.bindLong(13, entity.getWPurifierfilter4());
-        stmt.bindLong(14, entity.getWPurifierfilter5());
- 
-        String wTrueFlowmeter = entity.getWTrueFlowmeter();
-        if (wTrueFlowmeter != null) {
-            stmt.bindString(15, wTrueFlowmeter);
-        }
- 
-        String wPurifierPrimaryQuqlity = entity.getWPurifierPrimaryQuqlity();
-        if (wPurifierPrimaryQuqlity != null) {
-            stmt.bindString(16, wPurifierPrimaryQuqlity);
-        }
-        stmt.bindLong(17, entity.getFlowmeterWarm());
-        stmt.bindLong(18, entity.getWPurifierOutQuqlity());
- 
-        String wTotalProductionTime = entity.getWTotalProductionTime();
-        if (wTotalProductionTime != null) {
-            stmt.bindString(19, wTotalProductionTime);
-        }
-        stmt.bindLong(20, entity.getWContinuiProductionTime());
-        stmt.bindLong(21, entity.getWWaterStall());
-        stmt.bindLong(22, entity.getWMobileSignal());
-        stmt.bindLong(23, entity.getIsOpen());
-        stmt.bindLong(24, entity.getHavaWater());
-        stmt.bindLong(25, entity.getWaterWash());
-        stmt.bindLong(26, entity.getMakeWater());
-        stmt.bindLong(27, entity.getIsFull());
-        stmt.bindLong(28, entity.getRepair());
-        stmt.bindLong(29, entity.getIsLeakage());
-        stmt.bindLong(30, entity.getAlarming());
-        stmt.bindLong(31, entity.getWarming());
-        stmt.bindLong(32, entity.getAlarmState());
-        stmt.bindLong(33, entity.getAlarmIsLeakage());
-        stmt.bindLong(34, entity.getContinuProduction());
-        stmt.bindLong(35, entity.getAlarmFlowmeter());
-        stmt.bindLong(36, entity.getAlarmWash());
- 
-        String RechargeTime = entity.getRechargeTime();
-        if (RechargeTime != null) {
-            stmt.bindString(37, RechargeTime);
-        }
- 
-        String RechargeFlow = entity.getRechargeFlow();
-        if (RechargeFlow != null) {
-            stmt.bindString(38, RechargeFlow);
-        }
- 
-        String BackwaterInterval = entity.getBackwaterInterval();
-        if (BackwaterInterval != null) {
-            stmt.bindString(39, BackwaterInterval);
-        }
-        stmt.bindLong(40, entity.getBackwashTime());
- 
-        String BackwashInterval = entity.getBackwashInterval();
-        if (BackwashInterval != null) {
-            stmt.bindString(41, BackwashInterval);
-        }
-        stmt.bindLong(42, entity.getMachineType());
-        stmt.bindLong(43, entity.getWashTime());
+        stmt.bindLong(7, entity.getDeviceUserId());
+        stmt.bindLong(8, entity.getWPurifierState());
+        stmt.bindLong(9, entity.getBussinessmodule());
+        stmt.bindLong(10, entity.getWPurifierfilter());
+        stmt.bindLong(11, entity.getWPurifierfilter1());
+        stmt.bindLong(12, entity.getWPurifierfilter2());
+        stmt.bindLong(13, entity.getWPurifierfilter3());
+        stmt.bindLong(14, entity.getWPurifierfilter4());
+        stmt.bindLong(15, entity.getWPurifierfilter5());
+        stmt.bindLong(16, entity.getWTrueFlowmeter());
+        stmt.bindLong(17, entity.getWPurifierPrimaryQuqlity());
+        stmt.bindLong(18, entity.getFlowmeterWarm());
+        stmt.bindLong(19, entity.getWPurifierOutQuqlity());
+        stmt.bindLong(20, entity.getWTotalProductionTime());
+        stmt.bindLong(21, entity.getWContinuiProductionTime());
+        stmt.bindLong(22, entity.getWWaterStall());
+        stmt.bindLong(23, entity.getWMobileSignal());
+        stmt.bindLong(24, entity.getIsOpen());
+        stmt.bindLong(25, entity.getHavaWater());
+        stmt.bindLong(26, entity.getWaterWash());
+        stmt.bindLong(27, entity.getMakeWater());
+        stmt.bindLong(28, entity.getIsFull());
+        stmt.bindLong(29, entity.getIsReset());
+        stmt.bindLong(30, entity.getIsReset2());
+        stmt.bindLong(31, entity.getRepair());
+        stmt.bindLong(32, entity.getIsLeakage());
+        stmt.bindLong(33, entity.getAlarming());
+        stmt.bindLong(34, entity.getWarming());
+        stmt.bindLong(35, entity.getAlarmState());
+        stmt.bindLong(36, entity.getAlarmIsLeakage());
+        stmt.bindLong(37, entity.getContinuProduction());
+        stmt.bindLong(38, entity.getAlarmFlowmeter());
+        stmt.bindLong(39, entity.getAlarmWash());
+        stmt.bindLong(40, entity.getRechargeTime());
+        stmt.bindLong(41, entity.getRechargeFlow());
+        stmt.bindLong(42, entity.getBackwaterInterval());
+        stmt.bindLong(43, entity.getBackwashTime());
+        stmt.bindLong(44, entity.getBackwashInterval());
+        stmt.bindLong(45, entity.getMachineType());
+        stmt.bindLong(46, entity.getWashTime());
+        stmt.bindLong(47, entity.getGear());
     }
 
     @Override
@@ -231,82 +215,58 @@ public class EquipmentDao extends AbstractDao<Equipment, Long> {
         if (name != null) {
             stmt.bindString(3, name);
         }
+        stmt.bindLong(4, entity.getOnline() ? 1L: 0L);
  
         String deviceMac = entity.getDeviceMac();
         if (deviceMac != null) {
-            stmt.bindString(4, deviceMac);
+            stmt.bindString(5, deviceMac);
         }
  
         String deviceMCU = entity.getDeviceMCU();
         if (deviceMCU != null) {
-            stmt.bindString(5, deviceMCU);
+            stmt.bindString(6, deviceMCU);
         }
-        stmt.bindLong(6, entity.getDeviceUserId());
-        stmt.bindLong(7, entity.getWPurifierState());
-        stmt.bindLong(8, entity.getBussinessmodule());
-        stmt.bindLong(9, entity.getWPurifierfilter());
-        stmt.bindLong(10, entity.getWPurifierfilter1());
-        stmt.bindLong(11, entity.getWPurifierfilter2());
-        stmt.bindLong(12, entity.getWPurifierfilter3());
-        stmt.bindLong(13, entity.getWPurifierfilter4());
-        stmt.bindLong(14, entity.getWPurifierfilter5());
- 
-        String wTrueFlowmeter = entity.getWTrueFlowmeter();
-        if (wTrueFlowmeter != null) {
-            stmt.bindString(15, wTrueFlowmeter);
-        }
- 
-        String wPurifierPrimaryQuqlity = entity.getWPurifierPrimaryQuqlity();
-        if (wPurifierPrimaryQuqlity != null) {
-            stmt.bindString(16, wPurifierPrimaryQuqlity);
-        }
-        stmt.bindLong(17, entity.getFlowmeterWarm());
-        stmt.bindLong(18, entity.getWPurifierOutQuqlity());
- 
-        String wTotalProductionTime = entity.getWTotalProductionTime();
-        if (wTotalProductionTime != null) {
-            stmt.bindString(19, wTotalProductionTime);
-        }
-        stmt.bindLong(20, entity.getWContinuiProductionTime());
-        stmt.bindLong(21, entity.getWWaterStall());
-        stmt.bindLong(22, entity.getWMobileSignal());
-        stmt.bindLong(23, entity.getIsOpen());
-        stmt.bindLong(24, entity.getHavaWater());
-        stmt.bindLong(25, entity.getWaterWash());
-        stmt.bindLong(26, entity.getMakeWater());
-        stmt.bindLong(27, entity.getIsFull());
-        stmt.bindLong(28, entity.getRepair());
-        stmt.bindLong(29, entity.getIsLeakage());
-        stmt.bindLong(30, entity.getAlarming());
-        stmt.bindLong(31, entity.getWarming());
-        stmt.bindLong(32, entity.getAlarmState());
-        stmt.bindLong(33, entity.getAlarmIsLeakage());
-        stmt.bindLong(34, entity.getContinuProduction());
-        stmt.bindLong(35, entity.getAlarmFlowmeter());
-        stmt.bindLong(36, entity.getAlarmWash());
- 
-        String RechargeTime = entity.getRechargeTime();
-        if (RechargeTime != null) {
-            stmt.bindString(37, RechargeTime);
-        }
- 
-        String RechargeFlow = entity.getRechargeFlow();
-        if (RechargeFlow != null) {
-            stmt.bindString(38, RechargeFlow);
-        }
- 
-        String BackwaterInterval = entity.getBackwaterInterval();
-        if (BackwaterInterval != null) {
-            stmt.bindString(39, BackwaterInterval);
-        }
-        stmt.bindLong(40, entity.getBackwashTime());
- 
-        String BackwashInterval = entity.getBackwashInterval();
-        if (BackwashInterval != null) {
-            stmt.bindString(41, BackwashInterval);
-        }
-        stmt.bindLong(42, entity.getMachineType());
-        stmt.bindLong(43, entity.getWashTime());
+        stmt.bindLong(7, entity.getDeviceUserId());
+        stmt.bindLong(8, entity.getWPurifierState());
+        stmt.bindLong(9, entity.getBussinessmodule());
+        stmt.bindLong(10, entity.getWPurifierfilter());
+        stmt.bindLong(11, entity.getWPurifierfilter1());
+        stmt.bindLong(12, entity.getWPurifierfilter2());
+        stmt.bindLong(13, entity.getWPurifierfilter3());
+        stmt.bindLong(14, entity.getWPurifierfilter4());
+        stmt.bindLong(15, entity.getWPurifierfilter5());
+        stmt.bindLong(16, entity.getWTrueFlowmeter());
+        stmt.bindLong(17, entity.getWPurifierPrimaryQuqlity());
+        stmt.bindLong(18, entity.getFlowmeterWarm());
+        stmt.bindLong(19, entity.getWPurifierOutQuqlity());
+        stmt.bindLong(20, entity.getWTotalProductionTime());
+        stmt.bindLong(21, entity.getWContinuiProductionTime());
+        stmt.bindLong(22, entity.getWWaterStall());
+        stmt.bindLong(23, entity.getWMobileSignal());
+        stmt.bindLong(24, entity.getIsOpen());
+        stmt.bindLong(25, entity.getHavaWater());
+        stmt.bindLong(26, entity.getWaterWash());
+        stmt.bindLong(27, entity.getMakeWater());
+        stmt.bindLong(28, entity.getIsFull());
+        stmt.bindLong(29, entity.getIsReset());
+        stmt.bindLong(30, entity.getIsReset2());
+        stmt.bindLong(31, entity.getRepair());
+        stmt.bindLong(32, entity.getIsLeakage());
+        stmt.bindLong(33, entity.getAlarming());
+        stmt.bindLong(34, entity.getWarming());
+        stmt.bindLong(35, entity.getAlarmState());
+        stmt.bindLong(36, entity.getAlarmIsLeakage());
+        stmt.bindLong(37, entity.getContinuProduction());
+        stmt.bindLong(38, entity.getAlarmFlowmeter());
+        stmt.bindLong(39, entity.getAlarmWash());
+        stmt.bindLong(40, entity.getRechargeTime());
+        stmt.bindLong(41, entity.getRechargeFlow());
+        stmt.bindLong(42, entity.getBackwaterInterval());
+        stmt.bindLong(43, entity.getBackwashTime());
+        stmt.bindLong(44, entity.getBackwashInterval());
+        stmt.bindLong(45, entity.getMachineType());
+        stmt.bindLong(46, entity.getWashTime());
+        stmt.bindLong(47, entity.getGear());
     }
 
     @Override
@@ -320,46 +280,50 @@ public class EquipmentDao extends AbstractDao<Equipment, Long> {
             cursor.getLong(offset + 0), // id
             cursor.getInt(offset + 1), // type
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // name
-            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // deviceMac
-            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // deviceMCU
-            cursor.getInt(offset + 5), // deviceUserId
-            cursor.getInt(offset + 6), // wPurifierState
-            cursor.getInt(offset + 7), // bussinessmodule
-            cursor.getInt(offset + 8), // wPurifierfilter
-            cursor.getInt(offset + 9), // wPurifierfilter1
-            cursor.getInt(offset + 10), // wPurifierfilter2
-            cursor.getInt(offset + 11), // wPurifierfilter3
-            cursor.getInt(offset + 12), // wPurifierfilter4
-            cursor.getInt(offset + 13), // wPurifierfilter5
-            cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14), // wTrueFlowmeter
-            cursor.isNull(offset + 15) ? null : cursor.getString(offset + 15), // wPurifierPrimaryQuqlity
-            cursor.getInt(offset + 16), // FlowmeterWarm
-            cursor.getInt(offset + 17), // wPurifierOutQuqlity
-            cursor.isNull(offset + 18) ? null : cursor.getString(offset + 18), // wTotalProductionTime
-            cursor.getInt(offset + 19), // wContinuiProductionTime
-            cursor.getInt(offset + 20), // wWaterStall
-            cursor.getInt(offset + 21), // wMobileSignal
-            cursor.getInt(offset + 22), // IsOpen
-            cursor.getInt(offset + 23), // HavaWater
-            cursor.getInt(offset + 24), // WaterWash
-            cursor.getInt(offset + 25), // MakeWater
-            cursor.getInt(offset + 26), // IsFull
-            cursor.getInt(offset + 27), // Repair
-            cursor.getInt(offset + 28), // IsLeakage
-            cursor.getInt(offset + 29), // Alarming
-            cursor.getInt(offset + 30), // Warming
-            cursor.getInt(offset + 31), // AlarmState
-            cursor.getInt(offset + 32), // AlarmIsLeakage
-            cursor.getInt(offset + 33), // ContinuProduction
-            cursor.getInt(offset + 34), // AlarmFlowmeter
-            cursor.getInt(offset + 35), // AlarmWash
-            cursor.isNull(offset + 36) ? null : cursor.getString(offset + 36), // RechargeTime
-            cursor.isNull(offset + 37) ? null : cursor.getString(offset + 37), // RechargeFlow
-            cursor.isNull(offset + 38) ? null : cursor.getString(offset + 38), // BackwaterInterval
-            cursor.getInt(offset + 39), // BackwashTime
-            cursor.isNull(offset + 40) ? null : cursor.getString(offset + 40), // BackwashInterval
-            cursor.getInt(offset + 41), // MachineType
-            cursor.getInt(offset + 42) // WashTime
+            cursor.getShort(offset + 3) != 0, // online
+            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // deviceMac
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // deviceMCU
+            cursor.getInt(offset + 6), // deviceUserId
+            cursor.getInt(offset + 7), // wPurifierState
+            cursor.getInt(offset + 8), // bussinessmodule
+            cursor.getInt(offset + 9), // wPurifierfilter
+            cursor.getInt(offset + 10), // wPurifierfilter1
+            cursor.getInt(offset + 11), // wPurifierfilter2
+            cursor.getInt(offset + 12), // wPurifierfilter3
+            cursor.getInt(offset + 13), // wPurifierfilter4
+            cursor.getInt(offset + 14), // wPurifierfilter5
+            cursor.getInt(offset + 15), // wTrueFlowmeter
+            cursor.getInt(offset + 16), // wPurifierPrimaryQuqlity
+            cursor.getInt(offset + 17), // FlowmeterWarm
+            cursor.getInt(offset + 18), // wPurifierOutQuqlity
+            cursor.getInt(offset + 19), // wTotalProductionTime
+            cursor.getInt(offset + 20), // wContinuiProductionTime
+            cursor.getInt(offset + 21), // wWaterStall
+            cursor.getInt(offset + 22), // wMobileSignal
+            cursor.getInt(offset + 23), // IsOpen
+            cursor.getInt(offset + 24), // HavaWater
+            cursor.getInt(offset + 25), // WaterWash
+            cursor.getInt(offset + 26), // MakeWater
+            cursor.getInt(offset + 27), // IsFull
+            cursor.getInt(offset + 28), // isReset
+            cursor.getInt(offset + 29), // isReset2
+            cursor.getInt(offset + 30), // Repair
+            cursor.getInt(offset + 31), // IsLeakage
+            cursor.getInt(offset + 32), // Alarming
+            cursor.getInt(offset + 33), // Warming
+            cursor.getInt(offset + 34), // AlarmState
+            cursor.getInt(offset + 35), // AlarmIsLeakage
+            cursor.getInt(offset + 36), // ContinuProduction
+            cursor.getInt(offset + 37), // AlarmFlowmeter
+            cursor.getInt(offset + 38), // AlarmWash
+            cursor.getInt(offset + 39), // RechargeTime
+            cursor.getInt(offset + 40), // RechargeFlow
+            cursor.getInt(offset + 41), // BackwaterInterval
+            cursor.getInt(offset + 42), // BackwashTime
+            cursor.getInt(offset + 43), // BackwashInterval
+            cursor.getInt(offset + 44), // MachineType
+            cursor.getInt(offset + 45), // WashTime
+            cursor.getInt(offset + 46) // gear
         );
         return entity;
     }
@@ -369,46 +333,50 @@ public class EquipmentDao extends AbstractDao<Equipment, Long> {
         entity.setId(cursor.getLong(offset + 0));
         entity.setType(cursor.getInt(offset + 1));
         entity.setName(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
-        entity.setDeviceMac(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
-        entity.setDeviceMCU(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
-        entity.setDeviceUserId(cursor.getInt(offset + 5));
-        entity.setWPurifierState(cursor.getInt(offset + 6));
-        entity.setBussinessmodule(cursor.getInt(offset + 7));
-        entity.setWPurifierfilter(cursor.getInt(offset + 8));
-        entity.setWPurifierfilter1(cursor.getInt(offset + 9));
-        entity.setWPurifierfilter2(cursor.getInt(offset + 10));
-        entity.setWPurifierfilter3(cursor.getInt(offset + 11));
-        entity.setWPurifierfilter4(cursor.getInt(offset + 12));
-        entity.setWPurifierfilter5(cursor.getInt(offset + 13));
-        entity.setWTrueFlowmeter(cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14));
-        entity.setWPurifierPrimaryQuqlity(cursor.isNull(offset + 15) ? null : cursor.getString(offset + 15));
-        entity.setFlowmeterWarm(cursor.getInt(offset + 16));
-        entity.setWPurifierOutQuqlity(cursor.getInt(offset + 17));
-        entity.setWTotalProductionTime(cursor.isNull(offset + 18) ? null : cursor.getString(offset + 18));
-        entity.setWContinuiProductionTime(cursor.getInt(offset + 19));
-        entity.setWWaterStall(cursor.getInt(offset + 20));
-        entity.setWMobileSignal(cursor.getInt(offset + 21));
-        entity.setIsOpen(cursor.getInt(offset + 22));
-        entity.setHavaWater(cursor.getInt(offset + 23));
-        entity.setWaterWash(cursor.getInt(offset + 24));
-        entity.setMakeWater(cursor.getInt(offset + 25));
-        entity.setIsFull(cursor.getInt(offset + 26));
-        entity.setRepair(cursor.getInt(offset + 27));
-        entity.setIsLeakage(cursor.getInt(offset + 28));
-        entity.setAlarming(cursor.getInt(offset + 29));
-        entity.setWarming(cursor.getInt(offset + 30));
-        entity.setAlarmState(cursor.getInt(offset + 31));
-        entity.setAlarmIsLeakage(cursor.getInt(offset + 32));
-        entity.setContinuProduction(cursor.getInt(offset + 33));
-        entity.setAlarmFlowmeter(cursor.getInt(offset + 34));
-        entity.setAlarmWash(cursor.getInt(offset + 35));
-        entity.setRechargeTime(cursor.isNull(offset + 36) ? null : cursor.getString(offset + 36));
-        entity.setRechargeFlow(cursor.isNull(offset + 37) ? null : cursor.getString(offset + 37));
-        entity.setBackwaterInterval(cursor.isNull(offset + 38) ? null : cursor.getString(offset + 38));
-        entity.setBackwashTime(cursor.getInt(offset + 39));
-        entity.setBackwashInterval(cursor.isNull(offset + 40) ? null : cursor.getString(offset + 40));
-        entity.setMachineType(cursor.getInt(offset + 41));
-        entity.setWashTime(cursor.getInt(offset + 42));
+        entity.setOnline(cursor.getShort(offset + 3) != 0);
+        entity.setDeviceMac(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
+        entity.setDeviceMCU(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setDeviceUserId(cursor.getInt(offset + 6));
+        entity.setWPurifierState(cursor.getInt(offset + 7));
+        entity.setBussinessmodule(cursor.getInt(offset + 8));
+        entity.setWPurifierfilter(cursor.getInt(offset + 9));
+        entity.setWPurifierfilter1(cursor.getInt(offset + 10));
+        entity.setWPurifierfilter2(cursor.getInt(offset + 11));
+        entity.setWPurifierfilter3(cursor.getInt(offset + 12));
+        entity.setWPurifierfilter4(cursor.getInt(offset + 13));
+        entity.setWPurifierfilter5(cursor.getInt(offset + 14));
+        entity.setWTrueFlowmeter(cursor.getInt(offset + 15));
+        entity.setWPurifierPrimaryQuqlity(cursor.getInt(offset + 16));
+        entity.setFlowmeterWarm(cursor.getInt(offset + 17));
+        entity.setWPurifierOutQuqlity(cursor.getInt(offset + 18));
+        entity.setWTotalProductionTime(cursor.getInt(offset + 19));
+        entity.setWContinuiProductionTime(cursor.getInt(offset + 20));
+        entity.setWWaterStall(cursor.getInt(offset + 21));
+        entity.setWMobileSignal(cursor.getInt(offset + 22));
+        entity.setIsOpen(cursor.getInt(offset + 23));
+        entity.setHavaWater(cursor.getInt(offset + 24));
+        entity.setWaterWash(cursor.getInt(offset + 25));
+        entity.setMakeWater(cursor.getInt(offset + 26));
+        entity.setIsFull(cursor.getInt(offset + 27));
+        entity.setIsReset(cursor.getInt(offset + 28));
+        entity.setIsReset2(cursor.getInt(offset + 29));
+        entity.setRepair(cursor.getInt(offset + 30));
+        entity.setIsLeakage(cursor.getInt(offset + 31));
+        entity.setAlarming(cursor.getInt(offset + 32));
+        entity.setWarming(cursor.getInt(offset + 33));
+        entity.setAlarmState(cursor.getInt(offset + 34));
+        entity.setAlarmIsLeakage(cursor.getInt(offset + 35));
+        entity.setContinuProduction(cursor.getInt(offset + 36));
+        entity.setAlarmFlowmeter(cursor.getInt(offset + 37));
+        entity.setAlarmWash(cursor.getInt(offset + 38));
+        entity.setRechargeTime(cursor.getInt(offset + 39));
+        entity.setRechargeFlow(cursor.getInt(offset + 40));
+        entity.setBackwaterInterval(cursor.getInt(offset + 41));
+        entity.setBackwashTime(cursor.getInt(offset + 42));
+        entity.setBackwashInterval(cursor.getInt(offset + 43));
+        entity.setMachineType(cursor.getInt(offset + 44));
+        entity.setWashTime(cursor.getInt(offset + 45));
+        entity.setGear(cursor.getInt(offset + 46));
      }
     
     @Override
