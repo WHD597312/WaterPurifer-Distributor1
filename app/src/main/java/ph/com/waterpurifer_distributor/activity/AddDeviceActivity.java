@@ -61,6 +61,8 @@ public class AddDeviceActivity extends BaseActivity {
     RelativeLayout rl_add_wifi;
     @BindView(R.id.iv_add_bs)
     ImageView iv_add_bs;
+    @BindView(R.id.et_add_id)
+    TextView et_add_id;
     private ProgressDialog mProgressDialog;
     String deviceMac,userId;
     EquipmentImpl equmentDao;
@@ -111,9 +113,9 @@ public class AddDeviceActivity extends BaseActivity {
 
     }
 
-    @OnClick({R.id.btn_ensure,R.id.et_add_tx,R.id.rl_add_2,R.id.rl_add_1,R.id.iv_main_memu})
+    @OnClick({R.id.btn_ensure,R.id.et_add_tx,R.id.rl_add_2,R.id.rl_add_1,R.id.iv_main_memu,R.id.btn_add_qd})
     public void onClick(View view){
-        switch (view.getId()){
+        switch (view.getId()) {
 
             case R.id.et_add_tx:
                 startActivity(QRScanerActivity.class);
@@ -148,114 +150,26 @@ public class AddDeviceActivity extends BaseActivity {
                 //手动添加确定
                 deviceMac = et_ssid.getText().toString().trim();
                 if (TextUtils.isEmpty(deviceMac)) {
-                    ToastUtil.showShort(this, "账号码不能为空");
+                    ToastUtil.showShort(this, "IEMI不能为空");
                     break;
                 }
-                for (int i = 0; i< equipments.size(); i++){
-                     equipment = equipments.get(i);
-                     String id = equipment.getId()+"";
-                     if (id.equals(deviceMac)){
-                         ToastUtil.showShort(this,"设备已添加");
-                         break;
-                     }
+                Intent intent = new Intent(this, UserdetailsActivity.class);
+                intent.putExtra("deviceMac",deviceMac);
+                startActivity(intent);
+            case R.id.btn_add_qd:
+                deviceMac = et_add_id.getText().toString().trim();
+                if (TextUtils.isEmpty(deviceMac)) {
+                    ToastUtil.showShort(this, "请扫描二维码");
+                    break;
                 }
-
-//                boolean isConn = NetWorkUtil.isConn(MyApplication.getContext());
-                boolean isConn =true;
-                if (isConn){
-                    showProgressDialog("正在配置，请稍后。。。");
-                    Map<String, Object> params = new HashMap<>();
-                    params.put("deviceMac", deviceMac);
-                    params.put("deviceType", 8);
-                    params.put("deviceName", deviceMac);
-                    params.put("deviceUserId", userId);
-                    try {
-                        new addDeviceAsyncTask().execute(params).get(5, TimeUnit.SECONDS);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    } catch (ExecutionException e) {
-                        e.printStackTrace();
-                    } catch (TimeoutException e) {
-                        e.printStackTrace();
-                        Message message = new Message();
-                        message.obj = "TimeOut";
-                        handler.sendMessage(message);
-                    }
-                }else {
-                    ToastUtil.showShort(this, "无网络可用，请检查网络");
-                }
+                Intent intent1 = new Intent(this, UserdetailsActivity.class);
+                intent1.putExtra("deviceMac",deviceMac);
+                startActivity(intent1);
                 break;
-
-
         }
     }
 
-    private Handler handler = new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            if ("TimeOut".equals(msg.obj)){
-                if (progressDialog!=null&&progressDialog.isShowing())
-                    progressDialog.dismiss();
-                Toast.makeText(AddDeviceActivity.this,"请求超时,请重试",Toast.LENGTH_SHORT).show();
-            }
-        }
-    };
-//    Equipment equipment2;
-    class addDeviceAsyncTask extends AsyncTask<Map<String,Object>,Void,String> {
 
-        @Override
-        protected String doInBackground(Map<String, Object>... maps) {
-            String code = "";
-            Map<String ,Object> prarms = maps[0];
-            String result = HttpUtils.postOkHpptRequest(HttpUtils.ipAddress+"/app/device/addNewDevice",prarms);
-            Log.e("back", "--->"+result);
-            if (!ToastUtil.isEmpty(result)){
-                try {
-                    JSONObject jsonObject= new JSONObject(result);
-                    code = jsonObject.getString("returnCode");
-//                    JSONObject returnData = jsonObject.getJSONObject("returnData");
-                    if ("100".equals(code)){
-//                        Equipment equipment = new Equipment();
-//                        equipment.setName(deviceMac);
-//                        equipment.setType(8);
-//                        equipment.setDeviceMac(deviceMac);
-//                        equipment.setId(Long.valueOf(deviceMac));
-//                        equmentDao.insert(equipment);
-//                        equipment2 = equipment;
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-            return code;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-
-            switch (s) {
-
-                case "100":
-                    if (progressDialog!=null&&progressDialog.isShowing())
-                        progressDialog.dismiss();
-
-                    ToastUtil.showShort(AddDeviceActivity.this, "配置成功");
-                    Intent intent=new Intent();
-//                    intent.putExtra("equipment", equipment2);
-                    setResult(600,intent);
-                    finish();
-                    break;
-                default:
-                    if (progressDialog!=null&&progressDialog.isShowing())
-                        progressDialog.dismiss();
-                    ToastUtil.showShort(AddDeviceActivity.this, "配置失败，请重试");
-                    break;
-
-            }
-        }
-    }
 
     //显示dialog
     public void showProgressDialog(String message) {

@@ -75,6 +75,9 @@ public class UserdetailsActivity extends BaseActivity {
     @BindView(R.id.tv_type)
     TextView tvType;
 
+
+    boolean isMine=true;
+
     @Override
     public void initParms(Bundle parms) {
         deviceMac = parms.getString("deviceMac");
@@ -123,27 +126,32 @@ public class UserdetailsActivity extends BaseActivity {
                 break;
 
             case R.id.rl_user_equxq:
-
-                Intent intent=new Intent(this,EqupmentxqActivity.class);
-                intent.putExtra("deviceMac",deviceMac);
-                startActivity(intent);
-
+                if (isMine) {
+                    Intent intent = new Intent(this, EqupmentxqActivity.class);
+                    intent.putExtra("deviceMac", deviceMac);
+                    startActivity(intent);
+                }else
+                toast("该设备不属于你");
                 break;
             case R.id.bt_user_bd:
-                if(devicePayType!=-1) {
-                    boolean isConn = true;
-                    if (isConn) {
-                        showProgressDialog("正在加载，请稍后...");
-                        Map<String, Object> params = new HashMap<>();
-                        params.put("deviceMac", deviceMac);
-                        params.put("deviceSellerId", getSellerId());
-                        params.put("deviceSellerFlag", devicePayType);
+                if(isMine) {
+                    if (devicePayType != -1) {
+                        boolean isConn = true;
+                        if (isConn) {
+                            showProgressDialog("正在加载，请稍后...");
+                            Map<String, Object> params = new HashMap<>();
+                            params.put("deviceMac", deviceMac);
+                            params.put("deviceSellerId", getSellerId());
+                            params.put("deviceSellerFlag", devicePayType);
 
-                        new updateDeviceByFlagAsynTask().execute(params);
-                    } else {
-                        ToastUtil.showShort(this, "无网络可用，请检查网络");
+                            new updateDeviceByFlagAsynTask().execute(params);
+                        } else {
+                            ToastUtil.showShort(this, "无网络可用，请检查网络");
+                        }
                     }
-                }
+                }else
+                    toast("该设备不属于你");
+
                 break;
 
         }
@@ -214,10 +222,10 @@ public class UserdetailsActivity extends BaseActivity {
 
                         if (returnData.getInt("deviceLeaseType") == 1||returnData.getInt("deviceLeaseType") == 3) {
                             tvType.setText("使用水量");
-                            tvUserSytime.setText(returnData.getInt("deviceNum")+"");
+                            tvUserSytime.setText(returnData.getInt("deviceNum")+"L");
                         }else if(returnData.getInt("deviceLeaseType") == 2){
                             tvType.setText("使用天数");
-                            tvUserSytime.setText(returnData.getInt("deviceNum")/24+"");
+                            tvUserSytime.setText(returnData.getInt("deviceNum")/24+"天");
                         }else {
                             tvType.setVisibility(View.GONE);
                             tvUserSytime.setVisibility(View.GONE);
@@ -243,6 +251,11 @@ public class UserdetailsActivity extends BaseActivity {
                                 }
                             }
                         }
+
+                        if(returnData.getInt("deviceSellerId")==getSellerId())
+                            isMine=true;
+                        else
+                            isMine=false;
 
                     } catch (JSONException e) {
                         e.printStackTrace();

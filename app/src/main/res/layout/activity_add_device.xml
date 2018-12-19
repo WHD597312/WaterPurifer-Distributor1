@@ -213,7 +213,8 @@
             android:textSize="@dimen/sp_14"
             android:ems="10"
             android:inputType="textPersonName"
-            android:hint="请填写序列号码" />
+            android:paddingLeft="@dimen/dp_5"
+            android:hint="请填扫描序列号码" />
         
         <RelativeLayout
             android:id="@+id/et_add_tx"

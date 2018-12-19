@@ -51,6 +51,8 @@ public class LoginActivity extends BaseActivity {
     ImageView image_seepwd;
     SharedPreferences preferences;
     boolean isHideFirst;
+    String phone;
+    String password;
     @Override
     public void initParms(Bundle parms) {
 
@@ -69,7 +71,8 @@ public class LoginActivity extends BaseActivity {
         }
         application.addActivity(this);
         preferences = getSharedPreferences("my", MODE_PRIVATE);
-
+        et_name.setText(preferences.getString("phone", ""));
+        et_pswd.setText(preferences.getString("password", ""));
         progressDialog = new ProgressDialog(this);
     }
 
@@ -93,8 +96,8 @@ public class LoginActivity extends BaseActivity {
 
 
             case R.id.btn_login:
-                String phone = et_name.getText().toString();
-                String password = et_pswd.getText().toString();
+                 phone = et_name.getText().toString().trim();
+                 password = et_pswd.getText().toString().trim();
                 if (TextUtils.isEmpty(phone)) {
                     toast("账号码不能为空");
                     break;
@@ -159,7 +162,8 @@ public class LoginActivity extends BaseActivity {
         Window dialogWindow = dialog.getWindow();
         WindowManager.LayoutParams lp = dialogWindow.getAttributes();
         lp.width = (int) (ScreenSizeUtils.getInstance(this).getScreenWidth() * 0.75f);
-        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+//        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        lp.height = (int) (ScreenSizeUtils.getInstance(this).getScreenHeight() * 0.40f);
         lp.gravity = Gravity.CENTER;
         dialogWindow.setAttributes(lp);
         dialog.show();
@@ -224,6 +228,8 @@ public class LoginActivity extends BaseActivity {
                         String sellerPassword = returnData.getString("sellerPassword");
                         String sellerManagePassword = returnData.getString("sellerManagePassword");
                         SharedPreferences.Editor editor = preferences.edit();
+                        editor.putString("phone",phone);
+                        editor.putString("password",password);
                         editor.putInt("sellerId", sellerId);
                         editor.putInt("sellerRole", sellerRole);
                         editor.putInt("sellerFlag", sellerFlag);

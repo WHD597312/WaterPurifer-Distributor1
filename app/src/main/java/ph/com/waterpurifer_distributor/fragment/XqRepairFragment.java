@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -12,6 +13,8 @@ import android.util.Log;
 import android.view.View;
 
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,7 +33,10 @@ import butterknife.OnClick;
 import ph.com.waterpurifer_distributor.R;
 import ph.com.waterpurifer_distributor.adapter.xqRepairAdapter;
 import ph.com.waterpurifer_distributor.base.BaseFragment;
+import ph.com.waterpurifer_distributor.base.MyApplication;
 import ph.com.waterpurifer_distributor.pojo.RepireList;
+import ph.com.waterpurifer_distributor.util.NetWorkUtil;
+import ph.com.waterpurifer_distributor.util.SharedPreferencesHelper;
 import ph.com.waterpurifer_distributor.util.ToastUtil;
 import ph.com.waterpurifer_distributor.util.http.HttpUtils;
 import ph.com.waterpurifer_distributor.view.SpaceItemDecoration;
@@ -42,8 +48,10 @@ public class XqRepairFragment extends BaseFragment {
     List <RepireList> repireLists ;
     xqRepairAdapter xqRepairAdapter;
     RefreshLayout refreshLayou;
+    int pageNum = 1;
     int pos  ;
     int flag;
+    int sellerId;
     @Override
     public int bindLayout() {
         return R.layout.activity_xqrepair;
@@ -52,9 +60,89 @@ public class XqRepairFragment extends BaseFragment {
     @Override
     public void initView(View view) {
         repireLists = new ArrayList<>();
-        progressDialog = new ProgressDialog(getActivity());
-        showProgressDialog("正在加载数据。。。");
-        new GetRepairListAsyncTask().execute();
+        SharedPreferencesHelper sharedPreferencesHelper=new SharedPreferencesHelper(getActivity(),"my");
+        sellerId= (int) sharedPreferencesHelper.getSharedPreference("sellerId",0);
+         getRepairList();
+        refreshLayou =view. findViewById(R.id.refreshLayout_xq);
+
+        refreshLayou.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh(@NonNull RefreshLayout refreshLayout) {
+
+                boolean isConn = NetWorkUtil.isConn(MyApplication.getContext());
+                if (isConn){
+                    repireLists.clear();
+                    pageNum=1;
+                    getRepairList();
+                }else {
+                    ToastUtil.showShort( getActivity(),"无网络可用，请检查网络");
+                }
+
+            }
+
+        });
+
+        refreshLayou.setOnLoadMoreListener(new OnLoadMoreListener() {
+            @Override
+            public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
+                boolean isConn = NetWorkUtil.isConn(MyApplication.getContext());
+                if (isConn){
+                    refreshLayout.finishLoadMore(5000,false,false);
+                    pageNum++;
+                    getRepairList();
+                }else {
+                    ToastUtil.showShort( getActivity(),"无网络可用，请检查网络");
+                }
+            }
+        });
+    }
+
+    public void GetData(Map<String,Object>  param){
+        setRepairTypeAsyncTask = new SetRepairTypeAsyncTask();
+        setRepairTypeAsyncTask.execute(param);
+        new Thread(){
+
+            public void run() {
+                try {
+                    setRepairTypeAsyncTask.get(5, TimeUnit.SECONDS);
+                } catch (InterruptedException | ExecutionException e) {
+                    e.printStackTrace();
+                } catch (TimeoutException e) {
+                    e.printStackTrace();
+                    Message message = new Message();
+                    message.obj="TimeOut";
+                    handler.sendMessage(message);
+                }
+            }
+        }.start();
+
+    }
+    /*
+    * 获取维修列表分页获取
+    * */
+    public void getRepairList (){
+         getRepairListAsyncTask = new GetRepairListAsyncTask();
+         getRepairListAsyncTask.execute();
+         new Thread(){
+
+             public void run() {
+                 try {
+                     getRepairListAsyncTask.get(5,TimeUnit.SECONDS);
+                 } catch (InterruptedException | ExecutionException e) {
+                     e.printStackTrace();
+                 } catch (TimeoutException e) {
+                     e.printStackTrace();
+                     Message message = new Message();
+                     message.obj="TimeOut";
+                     handler.sendMessage(message);
+                 }
+             }
+         };
+
+    }
+
+    @Override
+    public void doBusiness(Context mContext) {
         xqRepairAdapter = new xqRepairAdapter(getActivity(),repireLists);
         rv_xqrepair.setLayoutManager(new LinearLayoutManager(getActivity()));
         rv_xqrepair.addItemDecoration(new SpaceItemDecoration(0,35));
@@ -62,7 +150,7 @@ public class XqRepairFragment extends BaseFragment {
         xqRepairAdapter.SetOnItemClick(new  xqRepairAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-              flag = repireLists.get(position).getRepairFlag();
+                flag = repireLists.get(position).getRepairFlag();
                 pos = position;
                 if (flag==0){
                     flag=1;
@@ -88,31 +176,6 @@ public class XqRepairFragment extends BaseFragment {
 
             }
         });
-    }
-
-    public void GetData( Map <String,Object> param){
-        setRepairTypeAsyncTask = new SetRepairTypeAsyncTask();
-        setRepairTypeAsyncTask.execute(param);
-        new Thread(){
-
-            public void run() {
-                try {
-                    setRepairTypeAsyncTask.get(5, TimeUnit.SECONDS);
-                } catch (InterruptedException | ExecutionException e) {
-                    e.printStackTrace();
-                } catch (TimeoutException e) {
-                    e.printStackTrace();
-                    Message message = new Message();
-                    message.obj="TimeOut";
-                    handler.sendMessage(message);
-                }
-            }
-        }.start();
-
-    }
-
-    @Override
-    public void doBusiness(Context mContext) {
 
     }
 
@@ -120,17 +183,6 @@ public class XqRepairFragment extends BaseFragment {
     public void widgetClick(View v) {
 
     }
-    private ProgressDialog progressDialog;
-    //显示dialog
-    public void showProgressDialog(String message) {
-
-        progressDialog.setMessage(message);
-        progressDialog.setCancelable(false);
-        progressDialog.show();
-
-    }
-
-
 
     @OnClick({})
     public void onClick(View view){
@@ -147,7 +199,7 @@ public class XqRepairFragment extends BaseFragment {
             }
         }
     };
-
+    GetRepairListAsyncTask getRepairListAsyncTask;
     class GetRepairListAsyncTask extends AsyncTask  <Void,Void,String>{
         @Override
         protected void onPreExecute() {
@@ -158,7 +210,7 @@ public class XqRepairFragment extends BaseFragment {
         protected String doInBackground(Void... voids) {
             String code = "";
 //            String result = HttpUtils.getOkHpptRequest(HttpUtils.ipAddress+"/app/user/getRepairList?sellerId=1");
-            String result=  HttpUtils.requestGet( HttpUtils.baseUrl+"app/user/getRepairList?sellerId=1");
+            String result=  HttpUtils.requestGet( HttpUtils.baseUrl+"app/user/getRepairList?sellerId="+sellerId+"&pageNum="+pageNum);
             Log.e("result", "doInBackground: --》"+result );
             try {
                 if (!TextUtils.isEmpty(result)){
@@ -191,7 +243,6 @@ public class XqRepairFragment extends BaseFragment {
                         repireLists.add(repireList);
                     }
                 }
-
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -205,9 +256,20 @@ public class XqRepairFragment extends BaseFragment {
             super.onPostExecute(s);
             switch (s){
                 case "100":
+                    refreshLayou.finishLoadMore(true);
+                    refreshLayou.finishRefresh(true);
                     xqRepairAdapter.Refrash(repireLists);
                     xqRepairAdapter.notifyDataSetChanged();
-                    if (progressDialog!=null&&progressDialog.isShowing())
+                    break;
+
+                case "20010":
+                    refreshLayou.finishLoadMore(false);
+                    ToastUtil.showShort(getActivity(),"没有更多的报修信息");
+                    break;
+
+                case "20009":
+                    refreshLayou.finishRefresh(false);
+                    ToastUtil.showShort(getActivity(),"暂时无报修设备");
                     break;
             }
         }
