@@ -156,6 +156,7 @@ public class AddDeviceActivity extends BaseActivity {
                 Intent intent = new Intent(this, UserdetailsActivity.class);
                 intent.putExtra("deviceMac",deviceMac);
                 startActivity(intent);
+                break;
             case R.id.btn_add_qd:
                 deviceMac = et_add_id.getText().toString().trim();
                 if (TextUtils.isEmpty(deviceMac)) {

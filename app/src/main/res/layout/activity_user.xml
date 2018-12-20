@@ -53,7 +53,6 @@
             android:textSize="@dimen/sp_12"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="13333333333"
 
             />
 
@@ -86,7 +85,6 @@
                android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                android:layout_centerVertical="true"
-               android:text="1566666"
                android:textColor="#4a4a4a"
                android:textSize="@dimen/sp_14"
                android:layout_marginRight="@dimen/dp_20"
@@ -153,7 +151,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:text="2018-11-05"
+
                 android:layout_marginRight="@dimen/dp_20"
                 />
 
@@ -188,7 +186,6 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:text="浙江省宁波市慈溪市"
                 android:textSize="@dimen/sp_14"
                 android:textColor="#4a4a4a"
                 android:layout_marginRight="@dimen/dp_20"
@@ -224,7 +221,6 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:text="开发大道香格大厦"
                 android:textColor="#4a4a4a"
                 android:src="@mipmap/menu_xzn"
                 android:textSize="@dimen/sp_14"
@@ -260,7 +256,6 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:text="90天"
                 android:textColor="#4a4a4a"
                 android:textSize="@dimen/sp_14"
                 android:layout_marginRight="@dimen/dp_20"

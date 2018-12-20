@@ -25,6 +25,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         APP_NAME = MyApplication.APP_NAME;
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

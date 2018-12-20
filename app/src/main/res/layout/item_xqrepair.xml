@@ -30,7 +30,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="故障类型："
-        android:layout_marginTop="@dimen/dp_20"
+        android:layout_marginTop="@dimen/dp_15"
         android:layout_marginLeft="@dimen/dp_20"
         android:textSize="@dimen/sp_14"
         />
@@ -51,7 +51,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="接单状态："
-        android:layout_marginTop="@dimen/dp_20"
+        android:layout_marginTop="@dimen/dp_15"
         android:layout_marginLeft="@dimen/dp_20"
         android:textSize="@dimen/sp_14"
         />
@@ -72,7 +72,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="预约时间："
-        android:layout_marginTop="@dimen/dp_20"
+        android:layout_marginTop="@dimen/dp_15"
         android:layout_marginLeft="@dimen/dp_20"
         android:textSize="@dimen/sp_14"
         />
@@ -92,7 +92,7 @@
         android:layout_below="@+id/tv_xqre_yytime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp_20"
+        android:layout_marginTop="@dimen/dp_15"
         android:text="设备地址："
         android:layout_marginLeft="@dimen/dp_20"
         android:textSize="@dimen/sp_14"
@@ -113,9 +113,9 @@
         android:layout_below="@+id/tv_xqre_yyadress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="详细地址："
+        android:text="详细描述："
         android:layout_marginLeft="@dimen/dp_20"
-        android:layout_marginTop="@dimen/dp_20"
+        android:layout_marginTop="@dimen/dp_15"
         android:layout_marginBottom="@dimen/dp_20"
         android:textSize="@dimen/sp_14"
         />
@@ -132,7 +132,7 @@
         />
     <Button
         android:id="@+id/bt_xqre_td"
-        android:layout_width="@dimen/dp_60"
+        android:layout_width="@dimen/dp_70"
         android:layout_height="@dimen/dp_29"
         android:text="受理"
         android:textColor="#44deff"

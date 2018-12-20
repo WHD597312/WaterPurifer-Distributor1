@@ -62,7 +62,7 @@ public class XqRepairFragment extends BaseFragment {
         repireLists = new ArrayList<>();
         SharedPreferencesHelper sharedPreferencesHelper=new SharedPreferencesHelper(getActivity(),"my");
         sellerId= (int) sharedPreferencesHelper.getSharedPreference("sellerId",0);
-         getRepairList();
+//        getRepairList();
         refreshLayou =view. findViewById(R.id.refreshLayout_xq);
 
         refreshLayou.setOnRefreshListener(new OnRefreshListener() {
@@ -72,6 +72,7 @@ public class XqRepairFragment extends BaseFragment {
                 boolean isConn = NetWorkUtil.isConn(MyApplication.getContext());
                 if (isConn){
                     repireLists.clear();
+                    Log.e("FFFFSDDD", "onRefresh: -->"+repireLists.size() );
                     pageNum=1;
                     getRepairList();
                 }else {
@@ -95,6 +96,12 @@ public class XqRepairFragment extends BaseFragment {
                 }
             }
         });
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        getRepairList();
     }
 
     public void GetData(Map<String,Object>  param){
@@ -256,6 +263,7 @@ public class XqRepairFragment extends BaseFragment {
             super.onPostExecute(s);
             switch (s){
                 case "100":
+                    Log.e("FFFFSDDD", "onRefresh: -->"+repireLists.size() );
                     refreshLayou.finishLoadMore(true);
                     refreshLayou.finishRefresh(true);
                     xqRepairAdapter.Refrash(repireLists);

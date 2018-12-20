@@ -8,9 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-
 import java.util.List;
-
 import ph.com.waterpurifer_distributor.R;
 import ph.com.waterpurifer_distributor.pojo.RepireList;
 
@@ -42,16 +40,24 @@ public class xqRepairAdapter extends RecyclerView.Adapter<xqRepairAdapter.MyView
         int flag = mData.get(position).getRepairFlag();
         if (flag==0){
             holder.tv_xqre_jdzt1.setText("等待接单");
+            holder.bt_xqre_td.setText("处理");
+            holder.bt_xqre_td.setBackground(context.getDrawable(R.drawable.bg_xqrepair_td));
+            holder.bt_xqre_td.setTextColor(context.getResources().getColor(R.color.color_toblue));
 
         }else if (flag==1){
             holder.tv_xqre_jdzt1.setText("处理中");
             holder.bt_xqre_td.setText("处理中");
+            holder.bt_xqre_td.setBackground(context.getDrawable(R.drawable.bg_xqrepair_td));
+            holder.bt_xqre_td.setTextColor(context.getResources().getColor(R.color.color_toblue));
         }else if (flag==2){
             holder.tv_xqre_jdzt1.setText("处理完成");
-            holder.bt_xqre_td.setText("删除");
+            holder.bt_xqre_td.setText("已完成");
+            holder.bt_xqre_td.setBackground(context.getDrawable(R.drawable.bg_xqrepair_td1));
+            holder.bt_xqre_td.setTextColor(context.getResources().getColor(R.color.color_gray2));
         }
         holder.tv_xqre_yytime1.setText(mData.get(position).getRepairTime());
         holder.tv_xqre_yyadress1.setText(mData.get(position).getRepairAddress());
+        holder.tv_xqre_yyadressxq1.setText(mData.get(position).getRepairDesc());
         holder.bt_xqre_td.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -85,7 +91,7 @@ public class xqRepairAdapter extends RecyclerView.Adapter<xqRepairAdapter.MyView
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView tv_xqre_type1,tv_xqre_jdzt1,tv_xqre_yytime1,tv_xqre_phone1,tv_xqre_yyadress1;
+        TextView tv_xqre_type1,tv_xqre_jdzt1,tv_xqre_yytime1,tv_xqre_phone1,tv_xqre_yyadress1,tv_xqre_yyadressxq1;
         Button bt_xqre_td;
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -95,6 +101,7 @@ public class xqRepairAdapter extends RecyclerView.Adapter<xqRepairAdapter.MyView
             tv_xqre_phone1= (TextView)itemView.findViewById(R.id.tv_xqre_phone1);
             bt_xqre_td=(Button) itemView.findViewById(R.id.bt_xqre_td);
             tv_xqre_yyadress1= (TextView) itemView.findViewById(R.id.tv_xqre_yyadress1);
+            tv_xqre_yyadressxq1 =(TextView) itemView.findViewById(R.id.tv_xqre_yyadressxq1);
         }
     }
 
