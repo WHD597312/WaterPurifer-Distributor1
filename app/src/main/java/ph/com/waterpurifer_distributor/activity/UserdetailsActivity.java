@@ -1,11 +1,14 @@
 package ph.com.waterpurifer_distributor.activity;
 
 import android.app.ProgressDialog;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.CountDownTimer;
+import android.os.IBinder;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -27,9 +30,10 @@ import butterknife.OnClick;
 import ph.com.waterpurifer_distributor.R;
 import ph.com.waterpurifer_distributor.base.BaseActivity;
 import ph.com.waterpurifer_distributor.base.MyApplication;
+import ph.com.waterpurifer_distributor.pojo.Equipment;
 import ph.com.waterpurifer_distributor.util.HttpUtils;
-import ph.com.waterpurifer_distributor.util.NetWorkUtil;
 import ph.com.waterpurifer_distributor.util.ToastUtil;
+import ph.com.waterpurifer_distributor.util.mqtt.MQService;
 
 public class UserdetailsActivity extends BaseActivity {
     MyApplication application;
@@ -77,12 +81,11 @@ public class UserdetailsActivity extends BaseActivity {
     @BindView(R.id.tv_type)
     TextView tvType;
 
-
-    boolean isMine=true;
-
+    Equipment equipment;
     @Override
     public void initParms(Bundle parms) {
         deviceMac = parms.getString("deviceMac");
+        equipment=new Equipment();
     }
 
     @Override
@@ -98,12 +101,44 @@ public class UserdetailsActivity extends BaseActivity {
         }
         application.addActivity(this);
 
+        service = new Intent(this, MQService.class);
+        isBound = bindService(service, connection, Context.BIND_AUTO_CREATE);
         progressDialog = new ProgressDialog(this);
     }
 
+    Intent service;
+    MQService mqService;
+    boolean isBound;
+    ServiceConnection connection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            MQService.LocalBinder binder = (MQService.LocalBinder) service;
+            mqService = binder.getService();
+            isBound = true;
+            try {
+                if (!TextUtils.isEmpty(deviceMac)){
+                    mqService.setEquiment(equipment);
+                    String onlineTopicName = "p99/wPurifier1/" + deviceMac + "/transfer";
+                    String offlineTopicName = "p99/wPurifier1/" + deviceMac + "/lwt";
+                    mqService.subscribe(onlineTopicName,1);
+                    mqService.subscribe(offlineTopicName,1);
+                    mqService.getData(deviceMac);
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+        }
+    };
+
+
     @Override
     public void doBusiness(Context mContext) {
-   boolean isConn = NetWorkUtil.isConn(MyApplication.getContext());
+//                            boolean isConn = NetWorkUtil.isConn(MyApplication.getContext());
+        boolean isConn = true;
         if (isConn) {
             showProgressDialog("正在加载，请稍后...");
             Map<String, Object> params = new HashMap<>();
@@ -127,32 +162,28 @@ public class UserdetailsActivity extends BaseActivity {
                 break;
 
             case R.id.rl_user_equxq:
-                if (isMine&&returnData!=null) {
-                    Intent intent = new Intent(this, EqupmentxqActivity.class);
-                    intent.putExtra("deviceMac", deviceMac);
-                    startActivity(intent);
-                }else
-                toast("该设备不属于你");
+
+                Intent intent=new Intent(this,EqupmentxqActivity.class);
+                intent.putExtra("deviceMac",deviceMac);
+                intent.putExtra("equipment",equipment);
+                startActivity(intent);
+
                 break;
             case R.id.bt_user_bd:
-                if(isMine&&returnData!=null) {
-                    if (devicePayType != -1) {
-                        boolean isConn = true;
-                        if (isConn) {
-                            showProgressDialog("正在加载，请稍后...");
-                            Map<String, Object> params = new HashMap<>();
-                            params.put("deviceMac", deviceMac);
-                            params.put("deviceSellerId", getSellerId());
-                            params.put("deviceSellerFlag", devicePayType);
+                if(devicePayType!=-1) {
+                    boolean isConn = true;
+                    if (isConn) {
+                        showProgressDialog("正在加载，请稍后...");
+                        Map<String, Object> params = new HashMap<>();
+                        params.put("deviceMac", deviceMac);
+                        params.put("deviceSellerId", getSellerId());
+                        params.put("deviceSellerFlag", devicePayType);
 
-                            new updateDeviceByFlagAsynTask().execute(params);
-                        } else {
-                            ToastUtil.showShort(this, "无网络可用，请检查网络");
-                        }
+                        new updateDeviceByFlagAsynTask().execute(params);
+                    } else {
+                        ToastUtil.showShort(this, "无网络可用，请检查网络");
                     }
-                }else
-                    toast("该设备不属于你");
-
+                }
                 break;
 
         }
@@ -163,7 +194,6 @@ public class UserdetailsActivity extends BaseActivity {
     String returnMsg;
     JSONObject returnData;
     int devicePayType;
-    CountDownTimer countDownTimer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -188,7 +218,6 @@ public class UserdetailsActivity extends BaseActivity {
 //                    JSONObject returnData = jsonObject.getJSONObject("returnData");
                     if ("100".equals(code)) {
                         returnData = jsonObject.getJSONObject("returnData");
-
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -207,70 +236,56 @@ public class UserdetailsActivity extends BaseActivity {
                     if (progressDialog != null && progressDialog.isShowing())
                         progressDialog.dismiss();
                     try {
-                        if (returnData != null) {
+                        tvUserName.setText(returnData.getString("deviceUserName"));
+                        tvUserEquname.setText(returnData.getString("deviceName"));
 
-                            tvUserName.setText(returnData.getString("deviceUserName"));
-                            tvUserEquname.setText(returnData.getString("deviceName"));
-                            Date date = new Date(returnData.getLong("deviceCreatTime"));
-                            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-                            tvUserTime.setText(format.format(date));
-                            String address = returnData.getString("deviceUserAddress");
-                            tvUserAdress.setText(address.substring(0, address.indexOf("市") + 1));
-                            if (address.indexOf("市") + 1 == address.length())
-                                tvUserXqadress.setText("暂无");
-                            else
-                                tvUserXqadress.setText(address.substring((address.indexOf("市") + 1), address.length()));
+                        Date date = new Date(returnData.getLong("deviceCreatTime"));
+                        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                        tvUserTime.setText(format.format(date));
 
-                            if (returnData.getInt("deviceLeaseType") == 1 || returnData.getInt("deviceLeaseType") == 3) {
-                                tvType.setText("使用水量");
-                                tvUserSytime.setText(returnData.getInt("deviceNum") + "L");
-                            } else if (returnData.getInt("deviceLeaseType") == 2) {
-                                tvType.setText("使用天数");
-                                tvUserSytime.setText(returnData.getInt("deviceNum") / 24 + "天");
-                            } else {
-                                tvType.setVisibility(View.GONE);
-                                tvUserSytime.setVisibility(View.GONE);
-                            }
+                        String address=returnData.getString("deviceUserAddress");
 
-                            if (returnData.getInt("deviceLeaseType") == 4) {
-                                btUserBd.setBackgroundResource(R.drawable.bg_fill_gray25);
-                                devicePayType = -1;
-                            } else {
-                                if (returnData.getInt("deviceUserId") == 0) {
-                                    btUserBd.setBackgroundResource(R.drawable.bg_fill_gray25);
-                                    devicePayType = -1;
-                                } else {
-                                    if (returnData.getInt("devicePayType") == 1) {
-                                        btUserBd.setText("解除绑定");
-                                        devicePayType = 1;
-                                    } else {
-                                        btUserBd.setText("绑定");
-                                        devicePayType = 0;
-                                    }
-                                }
-                            }
+                        tvUserAdress.setText(address.substring(0,address.indexOf("市")+1));
+                        if(address.indexOf("市")+1==address.length())
+                            tvUserXqadress.setText("暂无");
+                        else
+                            tvUserXqadress.setText(address.substring((address.indexOf("市")+1),address.length()));
 
-                            if (returnData.getInt("deviceSellerId") == getSellerId())
-                                isMine = true;
-                            else
-                                isMine = false;
+                        if (returnData.getInt("deviceLeaseType") == 1||returnData.getInt("deviceLeaseType") == 3) {
+                            tvType.setText("使用水量");
+                            tvUserSytime.setText(returnData.getInt("deviceNum")+"");
+                        }else if(returnData.getInt("deviceLeaseType") == 2){
+                            tvType.setText("使用天数");
+                            tvUserSytime.setText(returnData.getInt("deviceNum")/24+"");
                         }else {
-                            toast("无此设备IMEI，将在三秒后自动退出");
-                             countDownTimer = new CountDownTimer(3000,1000) {
-                                @Override
-                                public void onTick(long millisUntilFinished) {
-
-                                }
-
-                                @Override
-                                public void onFinish() {
-                                    application.removeActivity(UserdetailsActivity.this);
-                                }
-                            }.start();
+                            tvType.setVisibility(View.GONE);
+                            tvUserSytime.setVisibility(View.GONE);
                         }
-                        } catch(JSONException e){
-                            e.printStackTrace();
+
+                        if(returnData.getInt("deviceLeaseType")==4) {
+                            btUserBd.setBackgroundResource(R.drawable.bg_fill_gray25);
+                            devicePayType=-1;
                         }
+                        else {
+                            if(returnData.getInt("deviceUserId")==0) {
+                                btUserBd.setBackgroundResource(R.drawable.bg_fill_gray25);
+                                devicePayType=-1;
+                            }
+                            else {
+                                if(returnData.getInt("devicePayType")==1) {
+                                    btUserBd.setText("解除绑定");
+                                    devicePayType=1;
+                                }
+                                else {
+                                    btUserBd.setText("绑定");
+                                    devicePayType=0;
+                                }
+                            }
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
 
                     break;
                 default:
@@ -351,15 +366,10 @@ public class UserdetailsActivity extends BaseActivity {
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-    }
-
-    @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (countDownTimer!=null)
-            countDownTimer.cancel();
-
+        if (isBound && connection!=null){
+            unbindService(connection);
+        }
     }
 }

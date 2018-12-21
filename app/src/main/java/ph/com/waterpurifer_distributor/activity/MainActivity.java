@@ -2,37 +2,57 @@ package ph.com.waterpurifer_distributor.activity;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.graphics.Color;
+import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import ph.com.waterpurifer_distributor.R;
 import ph.com.waterpurifer_distributor.adapter.ClickViewPageAdapter;
+import ph.com.waterpurifer_distributor.adapter.MainAdapter;
 import ph.com.waterpurifer_distributor.base.BaseActivity;
 import ph.com.waterpurifer_distributor.base.BaseFragment;
 import ph.com.waterpurifer_distributor.base.MyApplication;
+import ph.com.waterpurifer_distributor.database.dao.daoImp.EquipmentImpl;
 import ph.com.waterpurifer_distributor.fragment.MainFragment;
 import ph.com.waterpurifer_distributor.fragment.MyFragment;
 import ph.com.waterpurifer_distributor.fragment.XqRepairFragment;
 import ph.com.waterpurifer_distributor.pojo.DeviceListData;
+import ph.com.waterpurifer_distributor.pojo.Equipment;
 import ph.com.waterpurifer_distributor.util.HttpUtils;
-import ph.com.waterpurifer_distributor.util.NetWorkUtil;
 import ph.com.waterpurifer_distributor.util.ToastUtil;
+import ph.com.waterpurifer_distributor.util.mqtt.MQTTMessageReveiver;
 import ph.com.waterpurifer_distributor.view.NoSrcollViewPage;
+import ph.com.waterpurifer_distributor.view.SpaceItemDecoration;
 
 public class MainActivity extends BaseActivity {
     MyApplication application;
@@ -42,6 +62,7 @@ public class MainActivity extends BaseActivity {
     TabLayout tl_flower;
     List<String> circle = new ArrayList<>();
     List<BaseFragment> fragmentList = new ArrayList<>();
+    private EquipmentImpl equipmentImpl;
 
     @Override
     public void initParms(Bundle parms) {
@@ -60,16 +81,14 @@ public class MainActivity extends BaseActivity {
             application = (MyApplication) getApplication();
         }
         application.addActivity(this);
+        equipmentImpl=new EquipmentImpl(getApplicationContext());
         initView();
     }
 
     @Override
     public void doBusiness(Context mContext) {
         progressDialog = new ProgressDialog(this);
-        getData();
-    }
-    public void  getData (){
-        boolean isConn = NetWorkUtil.isConn(MyApplication.getContext());
+        boolean isConn=true;
         if (isConn){
             showProgressDialog("正在加载，请稍后...");
             Map<String, Object> params = new HashMap<>();
@@ -201,6 +220,7 @@ public class MainActivity extends BaseActivity {
             Log.e("back", "--->" + result);
             if (!ToastUtil.isEmpty(result)) {
                 try {
+                    equipmentImpl.deleteAll();
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getString("returnCode");
                     returnMsg=jsonObject.getString("returnMsg");
@@ -214,6 +234,12 @@ public class MainActivity extends BaseActivity {
                             //通过反射 得到UserBean.class
                             DeviceListData userList = gson.fromJson(list.get(i), DeviceListData.class);
                             allListData.add(userList);
+                            Equipment equipment=new Equipment();
+                            equipment.setId(userList.getDeviceId());
+                            equipment.setDeviceMac(userList.getDeviceMac());
+                            equipment.setDeviceUserId(userList.getDeviceUserId());
+                            equipment.setName(userList.getDeviceName());
+                            equipmentImpl.insert(equipment);
                         }
                     }
                 } catch (Exception e) {
@@ -234,6 +260,10 @@ public class MainActivity extends BaseActivity {
                         progressDialog.dismiss();
                     if (mainFragment.isShow())
                         mainFragment.initData();
+                    IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+                    filter.addAction("mqttmessage2");
+                    myReceiver = new MQTTMessageReveiver();
+                    MainActivity.this.registerReceiver(myReceiver, filter);
                     break;
                 default:
                     if (progressDialog != null && progressDialog.isShowing())
@@ -252,5 +282,13 @@ public class MainActivity extends BaseActivity {
 
 
 
+    MQTTMessageReveiver myReceiver;
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (myReceiver != null) {
+            unregisterReceiver(myReceiver);
+        }
+    }
 }

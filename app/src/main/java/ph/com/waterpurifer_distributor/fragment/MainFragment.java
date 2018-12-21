@@ -301,7 +301,6 @@ public class MainFragment extends BaseFragment {
                     intent.putExtra("deviceMac",deviceListData.get(position).getDeviceMac());
                     startActivity(intent);
                 }
-
             }
 
             @Override

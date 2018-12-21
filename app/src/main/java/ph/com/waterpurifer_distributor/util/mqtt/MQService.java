@@ -309,8 +309,6 @@ public class MQService extends Service {
             }
             JSONArray messageJsonArray = null;
             JSONObject messageJsonObject = null;
-            Equipment equipment = null;
-            equipment = equipmentDao.findDeviceByMacAddress2(macAddress);
             try {
                 if (!TextUtils.isEmpty(message) && message.startsWith("{") && message.endsWith("}")) {
                     messageJsonObject = new JSONObject(message);
@@ -456,9 +454,16 @@ public class MQService extends Service {
         List<String> list = new ArrayList<>();
         String onlineTopicName = "";
         String offlineTopicName = "";
-        List<Equipment> equipments = equipmentDao.findAll();
-        for (int i = 0; i < equipments.size(); i++) {
-            Equipment equipment = equipments.get(i);
+//        List<Equipment> equipments = equipmentDao.findAll();
+//        for (int i = 0; i < equipments.size(); i++) {
+//            Equipment equipment = equipments.get(i);
+//            String macAddress = equipment.getDeviceMac();
+//            onlineTopicName = "p99/wPurifier1/" + macAddress + "/transfer";
+//            offlineTopicName = "p99/wPurifier1/" + macAddress + "/lwt";
+//            list.add(onlineTopicName);
+//            list.add(offlineTopicName);
+//        }
+        if (equipment!=null){
             String macAddress = equipment.getDeviceMac();
             onlineTopicName = "p99/wPurifier1/" + macAddress + "/transfer";
             offlineTopicName = "p99/wPurifier1/" + macAddress + "/lwt";
@@ -586,5 +591,13 @@ public class MQService extends Service {
             }
             return null;
         }
+    }
+    Equipment equipment;
+    public void setEquiment(Equipment equiment){
+        this.equipment=equiment;
+    }
+
+    public Equipment getEquipment() {
+        return equipment;
     }
 }

@@ -62,7 +62,7 @@ public class XqRepairFragment extends BaseFragment {
         repireLists = new ArrayList<>();
         SharedPreferencesHelper sharedPreferencesHelper=new SharedPreferencesHelper(getActivity(),"my");
         sellerId= (int) sharedPreferencesHelper.getSharedPreference("sellerId",0);
-//        getRepairList();
+        getRepairList();
         refreshLayou =view. findViewById(R.id.refreshLayout_xq);
 
         refreshLayou.setOnRefreshListener(new OnRefreshListener() {
@@ -101,7 +101,7 @@ public class XqRepairFragment extends BaseFragment {
     @Override
     public void onStart() {
         super.onStart();
-        getRepairList();
+
     }
 
     public void GetData(Map<String,Object>  param){

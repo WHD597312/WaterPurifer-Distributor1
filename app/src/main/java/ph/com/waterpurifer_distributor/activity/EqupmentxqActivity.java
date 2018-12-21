@@ -34,6 +34,7 @@ import ph.com.waterpurifer_distributor.base.BaseActivity;
 import ph.com.waterpurifer_distributor.base.MyApplication;
 import ph.com.waterpurifer_distributor.database.dao.daoImp.EquipmentImpl;
 import ph.com.waterpurifer_distributor.pojo.Equipment;
+import ph.com.waterpurifer_distributor.util.Utils;
 import ph.com.waterpurifer_distributor.util.mqtt.MQService;
 import ph.com.waterpurifer_distributor.util.view.ScreenSizeUtils;
 
@@ -66,8 +67,10 @@ public class EqupmentxqActivity extends BaseActivity {
     ImageView iv_equxq_kg;//设备开关
     @BindView(R.id.tv_equxq_llql)
     ImageView tv_equxq_llql;//流量清0
-    @BindView(R.id.tv_equxq_sl) TextView tv_equxq_sl;//累计纯水质水量
-    @BindView(R.id.tv_use_day) TextView tv_use_day;//使用天数
+    @BindView(R.id.tv_equxq_sl)
+    TextView tv_equxq_sl;//累计纯水质水量
+    @BindView(R.id.tv_use_day)
+    TextView tv_use_day;//使用天数
 
 
     boolean isopen1 = true;
@@ -120,8 +123,7 @@ public class EqupmentxqActivity extends BaseActivity {
         equipmentImpl = new EquipmentImpl(getApplicationContext());
 
         Intent intent = getIntent();
-        String deviceMac = intent.getStringExtra("deviceMac");
-        equipment = equipmentImpl.findDeviceByMacAddress2(deviceMac);
+        equipment = (Equipment) intent.getSerializableExtra("equipment");
         setMode(equipment);
         IntentFilter filter = new IntentFilter("EqupmentxqActivity");
         receiver = new MessageReceiver();
@@ -159,9 +161,9 @@ public class EqupmentxqActivity extends BaseActivity {
         int wPurifierOutQuqlity = equipment.getWPurifierOutQuqlity();
         tv_equxq_js.setText(wPurifierOutQuqlity + "");
 
-        int wTotalProductionTime=equipment.getWTotalProductionTime();
-        int day=wTotalProductionTime/24;
-        tv_use_day.setText(day+"");
+        int wTotalProductionTime = equipment.getWTotalProductionTime();
+        int day = wTotalProductionTime / 24;
+        tv_use_day.setText(day + "");
         int RechargeTime = equipment.getRechargeTime();
         if (RechargeTime > 1) {
             RechargeTime = (RechargeTime - 1) / 24;
@@ -172,13 +174,18 @@ public class EqupmentxqActivity extends BaseActivity {
             iv_equxq_kg.setImageResource(R.mipmap.sz_kgk);
             isopen2 = true;
             OpenEqument = 2;
+            isopen3=true;
+            iv_equxq_qzkg.setImageResource(R.mipmap.sz_kgk);
+            isopen3 = true;
         } else if (isOpen == 0) {
             iv_equxq_kg.setImageResource(R.mipmap.sz_kgg);
             isopen2 = false;
             OpenEqument = 1;
+            iv_equxq_qzkg.setImageResource(R.mipmap.sz_kgg);
+            isopen3 = false;
         }
-        int wTrueFlowmeter=equipment.getWTrueFlowmeter();
-        tv_equxq_sl.setText(wTrueFlowmeter+"L");
+        int wTrueFlowmeter = equipment.getWTrueFlowmeter();
+        tv_equxq_sl.setText(wTrueFlowmeter + "L");
         int temp = equipment.getWarming();
         if (temp >= 0) {
             tv_equxq_wd.setText(temp + "℃");
@@ -200,14 +207,14 @@ public class EqupmentxqActivity extends BaseActivity {
         wPurifierfilter[3] = wPurifierfilter4;
         wPurifierfilter[4] = wPurifierfilter5;
 
-       int isLeakage=equipment.getIsLeakage();
-       if (isLeakage==1){
-           tv_equxq_lsjc.setImageResource(R.mipmap.sz_kgk);
-           isopen1=true;
-       }else if (isLeakage==0){
-           tv_equxq_lsjc.setImageResource(R.mipmap.sz_kgg);
-           isopen1=false;
-       }
+        int isLeakage = equipment.getIsLeakage();
+        if (isLeakage == 1) {
+            tv_equxq_lsjc.setImageResource(R.mipmap.sz_kgk);
+            isopen1 = true;
+        } else if (isLeakage == 0) {
+            tv_equxq_lsjc.setImageResource(R.mipmap.sz_kgg);
+            isopen1 = false;
+        }
     }
 
     Intent clockintent;
@@ -292,51 +299,64 @@ public class EqupmentxqActivity extends BaseActivity {
                 break;
             case R.id.rl_equxq_lsjc:
                 //漏水检查
-                if (isopen1) {
-                    tv_equxq_lsjc.setImageResource(R.mipmap.sz_kgg);
-                    isopen1 = false;
-                    equipment.setIsLeakage(0);
+                if (equipment.getOnline()) {
+                    if (isopen1) {
+                        tv_equxq_lsjc.setImageResource(R.mipmap.sz_kgg);
+                        isopen1 = false;
+                        equipment.setIsLeakage(0);
+                    } else {
+                        tv_equxq_lsjc.setImageResource(R.mipmap.sz_kgk);
+                        isopen1 = true;
+                        equipment.setIsLeakage(1);
+                    }
+                    if (Equservice != null) {
+                        Equservice.sendData(equipment);
+                    }
                 } else {
-                    tv_equxq_lsjc.setImageResource(R.mipmap.sz_kgk);
-                    isopen1 = true;
-                    equipment.setIsLeakage(1);
-                }
-                if (Equservice != null) {
-                    Equservice.sendData(equipment);
+                    Utils.showToast(this, "该设备离线");
                 }
                 break;
-
             case R.id.rl_equxq_kg:
                 //设备开关
-                if (isopen2) {
-                    iv_equxq_kg.setImageResource(R.mipmap.sz_kgg);
-                    isopen2 = false;
-                    OpenEqument = 1;
-                    equipment.setIsOpen(0);
+                if (equipment.getOnline()) {
+                    if (isopen2) {
+                        iv_equxq_kg.setImageResource(R.mipmap.sz_kgg);
+                        isopen2 = false;
+                        OpenEqument = 1;
+                        equipment.setIsOpen(0);
+                    } else {
+                        iv_equxq_kg.setImageResource(R.mipmap.sz_kgk);
+                        isopen2 = true;
+                        OpenEqument = 2;
+                        equipment.setIsOpen(1);
+                    }
+                    if (Equservice != null) {
+                        Equservice.sendData(equipment);
+                    }
                 } else {
-                    iv_equxq_kg.setImageResource(R.mipmap.sz_kgk);
-                    isopen2 = true;
-                    OpenEqument = 2;
-                    equipment.setIsOpen(1);
+                    Utils.showToast(this, "该设备离线");
                 }
-                if (Equservice != null) {
-                    Equservice.sendData(equipment);
-                }
+
                 break;
             case R.id.rl_equxq_qzkg:
                 //强制开关
-                if (isopen3) {
-                    iv_equxq_qzkg.setImageResource(R.mipmap.sz_kgg);
-                    isopen3 = false;
-                    equipment.setIsOpen(0);
+                if (equipment.getOnline()) {
+                    if (isopen3) {
+                        iv_equxq_qzkg.setImageResource(R.mipmap.sz_kgg);
+                        isopen3 = false;
+                        equipment.setIsOpen(0);
+                    } else {
+                        iv_equxq_qzkg.setImageResource(R.mipmap.sz_kgk);
+                        isopen3 = true;
+                        equipment.setIsOpen(1);
+                    }
+                    if (Equservice != null) {
+                        Equservice.sendData(equipment);
+                    }
                 } else {
-                    iv_equxq_qzkg.setImageResource(R.mipmap.sz_kgk);
-                    isopen3 = true;
-                    equipment.setIsOpen(1);
+                    Utils.showToast(this, "该设备离线");
                 }
-                if (Equservice != null) {
-                    Equservice.sendData(equipment);
-                }
+
                 break;
             case R.id.rl_equxq_lvx:
                 Intent intent = new Intent(this, LvTypeActivity.class);
@@ -381,18 +401,21 @@ public class EqupmentxqActivity extends BaseActivity {
         tv_make_qd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String ss = et_make_sz.getText().toString();
-                int hour = Integer.parseInt(ss);
-                if (hour >= 254) {
-
-                } else if (hour >= 0 && hour < 254) {
-                    if (Equservice != null) {
-                        equipment.setWContinuiProductionTime(hour);
-                        Equservice.sendData(equipment);
+                if (equipment.getOnline()) {
+                    String ss = et_make_sz.getText().toString();
+                    int hour = Integer.parseInt(ss);
+                    if (hour >= 254) {
+                        Utils.showToast(EqupmentxqActivity.this, "连续制水时间应大于0小于254");
+                    } else if (hour >= 0 && hour < 254) {
+                        if (Equservice != null) {
+                            equipment.setWContinuiProductionTime(hour);
+                            Equservice.sendData(equipment);
+                        }
+                        dialog.dismiss();
                     }
-                    dialog.dismiss();
+                } else {
+                    Utils.showToast(EqupmentxqActivity.this, "该设备离线");
                 }
-
             }
         });
         dialog.show();
@@ -426,11 +449,15 @@ public class EqupmentxqActivity extends BaseActivity {
         tv_make_qd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (Equservice != null) {
-                    equipment.setIsReset(1);
-                    Equservice.sendData(equipment);
+                if (equipment.getOnline()){
+                    if (Equservice != null) {
+                        equipment.setIsReset(1);
+                        Equservice.sendData(equipment);
+                        dialog.dismiss();
+                    }
+                }else {
+                    Utils.showToast(EqupmentxqActivity.this,"该设备离线");
                 }
-                dialog.dismiss();
             }
         });
         dialog.show();
